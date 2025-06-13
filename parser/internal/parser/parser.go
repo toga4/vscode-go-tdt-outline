@@ -30,22 +30,6 @@ type Line struct {
 	Character int `json:"character"`
 }
 
-// SymbolKind constants matching VS Code's SymbolKind enumeration
-const (
-	SymbolKindFunction = 11
-	SymbolKindStruct   = 12
-)
-
-// testNameFields contains field names commonly used for test case names
-var testNameFields = []string{
-	"name",
-	"testName",
-	"desc",
-	"description",
-	"title",
-	"scenario",
-}
-
 // Parse analyzes a Go file and extracts test functions with their test cases
 func Parse(filePath string) ([]Symbol, error) {
 	if filePath == "" {
@@ -96,7 +80,7 @@ func extractTestFunction(n ast.Node, fset *token.FileSet) *Symbol {
 	return &Symbol{
 		Name:     funcDecl.Name.Name,
 		Detail:   "test function",
-		Kind:     SymbolKindFunction,
+		Kind:     11, // 11 = SymbolKind.Function
 		Range:    toRange(startPos, endPos),
 		Children: testCases,
 	}
@@ -190,7 +174,7 @@ func createTestCaseSymbol(testName string, node ast.Node, fset *token.FileSet) S
 	return Symbol{
 		Name:   testName,
 		Detail: "test case",
-		Kind:   SymbolKindStruct,
+		Kind:   12, // 12 = SymbolKind.Struct
 		Range:  toRange(startPos, endPos),
 	}
 }
@@ -229,6 +213,16 @@ func extractTestName(caseLit *ast.CompositeLit) string {
 	}
 
 	return ""
+}
+
+// testNameFields contains field names commonly used for test case names
+var testNameFields = []string{
+	"name",
+	"testName",
+	"desc",
+	"description",
+	"title",
+	"scenario",
 }
 
 // isTestNameField checks if a field name is commonly used for test case names

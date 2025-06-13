@@ -21,17 +21,17 @@ func TestParse(t *testing.T) {
 				{
 					Name:   "TestExample",
 					Detail: "test function",
-					Kind:   SymbolKindFunction,
+					Kind:   11,
 					Children: []Symbol{
 						{
 							Name:   "正常系",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "ゼロ値",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 					},
 				},
@@ -45,34 +45,34 @@ func TestParse(t *testing.T) {
 				{
 					Name:   "TestFirst",
 					Detail: "test function",
-					Kind:   SymbolKindFunction,
+					Kind:   11,
 					Children: []Symbol{
 						{
 							Name:   "test1",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "test2",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 					},
 				},
 				{
 					Name:   "TestSecond",
 					Detail: "test function",
-					Kind:   SymbolKindFunction,
+					Kind:   11,
 					Children: []Symbol{
 						{
 							Name:   "test3",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "test4",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 					},
 				},
@@ -86,27 +86,27 @@ func TestParse(t *testing.T) {
 				{
 					Name:   "TestVariousFields",
 					Detail: "test function",
-					Kind:   SymbolKindFunction,
+					Kind:   11,
 					Children: []Symbol{
 						{
 							Name:   "説明フィールド",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "タイトルフィールド",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "シナリオフィールド",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "テスト名フィールド",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 					},
 				},
@@ -120,27 +120,27 @@ func TestParse(t *testing.T) {
 				{
 					Name:   "TestMultipleTables",
 					Detail: "test function",
-					Kind:   SymbolKindFunction,
+					Kind:   11,
 					Children: []Symbol{
 						{
 							Name:   "table1-test1",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "table1-test2",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "table2-test1",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "table2-test2",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 					},
 				},
@@ -166,22 +166,22 @@ func TestParse(t *testing.T) {
 				{
 					Name:   "TestCaseInsensitive",
 					Detail: "test function",
-					Kind:   SymbolKindFunction,
+					Kind:   11,
 					Children: []Symbol{
 						{
 							Name:   "大文字NAME",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "混合Name",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "小文字name",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 					},
 				},
@@ -207,44 +207,44 @@ func TestParse(t *testing.T) {
 				{
 					Name:   "TestTypedStruct",
 					Detail: "test function",
-					Kind:   SymbolKindFunction,
+					Kind:   11,
 					Children: []Symbol{
 						{
 							Name:   "正常系: 基本的なケース",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "正常系: ゼロ値のケース",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "異常系: 不正な入力",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 					},
 				},
 				{
 					Name:   "TestTypeAlias",
 					Detail: "test function",
-					Kind:   SymbolKindFunction,
+					Kind:   11,
 					Children: []Symbol{
 						{
 							Name:   "型エイリアス: ケース1",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "型エイリアス: ケース2",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "型エイリアス: ケース3",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 					},
 				},
@@ -258,66 +258,66 @@ func TestParse(t *testing.T) {
 				{
 					Name:   "TestWithMap",
 					Detail: "test function",
-					Kind:   SymbolKindFunction,
+					Kind:   11,
 					Children: []Symbol{
 						{
 							Name:   "正常系: 基本的なケース",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "正常系: ゼロ値",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "異常系: 負の値",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 					},
 				},
 				{
 					Name:   "TestSimpleMap",
 					Detail: "test function",
-					Kind:   SymbolKindFunction,
+					Kind:   11,
 					Children: []Symbol{
 						{
 							Name:   "one",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "two",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "three",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 					},
 				},
 				{
 					Name:   "TestTypedMap",
 					Detail: "test function",
-					Kind:   SymbolKindFunction,
+					Kind:   11,
 					Children: []Symbol{
 						{
 							Name:   "empty string",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "hello world",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 						{
 							Name:   "unicode",
 							Detail: "test case",
-							Kind:   SymbolKindStruct,
+							Kind:   12,
 						},
 					},
 				},
