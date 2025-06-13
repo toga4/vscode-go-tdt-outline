@@ -104,7 +104,7 @@ func extractTestFunction(n ast.Node, fset *token.FileSet) *Symbol {
 
 // extractTestCases finds and extracts test cases from a function body
 func extractTestCases(body *ast.BlockStmt, fset *token.FileSet) []Symbol {
-	allTestCases := []Symbol{}
+	var allTestCases []Symbol
 
 	// Look for all composite literals
 	// Pattern examples:
@@ -119,71 +119,80 @@ func extractTestCases(body *ast.BlockStmt, fset *token.FileSet) []Symbol {
 			return true
 		}
 
-		// Check if it's a map type with string keys
-		if mapType, ok := compLit.Type.(*ast.MapType); ok {
-			// Check if key type is string
-			if ident, ok := mapType.Key.(*ast.Ident); ok && ident.Name == "string" {
-				// Process map entries
-				for _, elt := range compLit.Elts {
-					kv, ok := elt.(*ast.KeyValueExpr)
-					if !ok {
-						continue
-					}
-
-					// Extract test name from key (string literal)
-					var testName string
-					if basicLit, ok := kv.Key.(*ast.BasicLit); ok && basicLit.Kind == token.STRING {
-						testName = strings.Trim(basicLit.Value, `"`)
-					}
-					if testName == "" {
-						continue
-					}
-
-					// Get position from the key-value pair
-					startPos := fset.Position(kv.Pos())
-					endPos := fset.Position(kv.End())
-					allTestCases = append(allTestCases, Symbol{
-						Name:   testName,
-						Detail: "test case",
-						Kind:   SymbolKindStruct,
-						Range:  toRange(startPos, endPos),
-					})
-				}
-				return true
-			}
+		// Check if it's a map type
+		if _, ok := compLit.Type.(*ast.MapType); ok {
+			testCases := extractTestCasesFromMap(compLit, fset)
+			allTestCases = append(allTestCases, testCases...)
+			return true
 		}
 
-		// Process slice/array composite literals (existing logic)
-		// Extract test cases from this composite literal
-		// We check all composite literals since we can't always determine
-		// if a type alias refers to a slice without type information
-		for _, elt := range compLit.Elts {
-			// Each element should be a struct literal
-			// Pattern: {name: "test1", input: "value", want: "expected"}
-			caseLit, ok := elt.(*ast.CompositeLit)
-			if !ok {
-				continue
-			}
-
-			testName := extractTestName(caseLit)
-			if testName == "" {
-				continue
-			}
-
-			startPos := fset.Position(caseLit.Pos())
-			endPos := fset.Position(caseLit.End())
-			allTestCases = append(allTestCases, Symbol{
-				Name:   testName,
-				Detail: "test case",
-				Kind:   SymbolKindStruct,
-				Range:  toRange(startPos, endPos),
-			})
-		}
+		// Otherwise, treat as slice/array
+		testCases := extractTestCasesFromSlice(compLit, fset)
+		allTestCases = append(allTestCases, testCases...)
 
 		return true
 	})
 
 	return allTestCases
+}
+
+// extractTestCasesFromMap extracts test cases from map pattern
+func extractTestCasesFromMap(compLit *ast.CompositeLit, fset *token.FileSet) []Symbol {
+	var testCases []Symbol
+
+	for _, elt := range compLit.Elts {
+		kv, ok := elt.(*ast.KeyValueExpr)
+		if !ok {
+			continue
+		}
+
+		testName, ok := extractStringLiteral(kv.Key)
+		if !ok {
+			continue
+		}
+
+		testCases = append(testCases, createTestCaseSymbol(testName, kv, fset))
+	}
+
+	return testCases
+}
+
+// extractTestCasesFromSlice extracts test cases from slice/array pattern
+func extractTestCasesFromSlice(compLit *ast.CompositeLit, fset *token.FileSet) []Symbol {
+	var testCases []Symbol
+
+	// Extract test cases from this composite literal
+	// We check all composite literals since we can't always determine
+	// if a type alias refers to a slice without type information
+	for _, elt := range compLit.Elts {
+		// Each element should be a struct literal
+		// Pattern: {name: "test1", input: "value", want: "expected"}
+		caseLit, ok := elt.(*ast.CompositeLit)
+		if !ok {
+			continue
+		}
+
+		testName := extractTestName(caseLit)
+		if testName == "" {
+			continue
+		}
+
+		testCases = append(testCases, createTestCaseSymbol(testName, caseLit, fset))
+	}
+
+	return testCases
+}
+
+// createTestCaseSymbol creates a Symbol for a test case
+func createTestCaseSymbol(testName string, node ast.Node, fset *token.FileSet) Symbol {
+	startPos := fset.Position(node.Pos())
+	endPos := fset.Position(node.End())
+	return Symbol{
+		Name:   testName,
+		Detail: "test case",
+		Kind:   SymbolKindStruct,
+		Range:  toRange(startPos, endPos),
+	}
 }
 
 // extractTestName extracts the test name from a struct literal
@@ -210,16 +219,13 @@ func extractTestName(caseLit *ast.CompositeLit) string {
 			continue
 		}
 
-		// Extract string literal value
-		// Pattern: "test case name"
-		basicLit, ok := kve.Value.(*ast.BasicLit)
-		if !ok || basicLit.Kind != token.STRING {
+		// Extract string literal value and remove quotes
+		// Pattern: "test case name" -> test case name
+		testName, ok := extractStringLiteral(kve.Value)
+		if !ok {
 			continue
 		}
-
-		// Remove quotes from string literal
-		// "test name" -> test name
-		return strings.Trim(basicLit.Value, `"`)
+		return testName
 	}
 
 	return ""
@@ -230,6 +236,14 @@ func isTestNameField(fieldName string) bool {
 	return slices.ContainsFunc(testNameFields, func(name string) bool {
 		return strings.EqualFold(fieldName, name)
 	})
+}
+
+func extractStringLiteral(expr ast.Expr) (string, bool) {
+	basicLit, ok := expr.(*ast.BasicLit)
+	if !ok || basicLit.Kind != token.STRING {
+		return "", false
+	}
+	return strings.Trim(basicLit.Value, `"`), true
 }
 
 // toRange converts token positions to VS Code range format (0-indexed)
