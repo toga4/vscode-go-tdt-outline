@@ -251,6 +251,79 @@ func TestParse(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name:     "map型のテストケース",
+			filePath: "testdata/map_test_cases.go",
+			want: []Symbol{
+				{
+					Name:   "TestWithMap",
+					Detail: "test function",
+					Kind:   SymbolKindFunction,
+					Children: []Symbol{
+						{
+							Name:   "正常系: 基本的なケース",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "正常系: ゼロ値",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "異常系: 負の値",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+					},
+				},
+				{
+					Name:   "TestSimpleMap",
+					Detail: "test function",
+					Kind:   SymbolKindFunction,
+					Children: []Symbol{
+						{
+							Name:   "one",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "two",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "three",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+					},
+				},
+				{
+					Name:   "TestTypedMap",
+					Detail: "test function",
+					Kind:   SymbolKindFunction,
+					Children: []Symbol{
+						{
+							Name:   "empty string",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "hello world",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "unicode",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {
