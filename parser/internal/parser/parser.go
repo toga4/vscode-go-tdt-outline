@@ -30,6 +30,12 @@ type Line struct {
 	Character int `json:"character"`
 }
 
+// VS Code SymbolKind constants
+const (
+	SymbolKindFunction = 11 // VS Code's SymbolKind.Function
+	SymbolKindStruct   = 12 // VS Code's SymbolKind.Struct
+)
+
 // Parse analyzes a Go file and extracts test functions with their test cases
 func Parse(filePath string) ([]Symbol, error) {
 	if filePath == "" {
@@ -80,7 +86,7 @@ func extractTestFunction(n ast.Node, fset *token.FileSet) *Symbol {
 	return &Symbol{
 		Name:     funcDecl.Name.Name,
 		Detail:   "test function",
-		Kind:     11, // 11 = SymbolKind.Function
+		Kind:     SymbolKindFunction,
 		Range:    toRange(startPos, endPos),
 		Children: testCases,
 	}
@@ -174,7 +180,7 @@ func createTestCaseSymbol(testName string, node ast.Node, fset *token.FileSet) S
 	return Symbol{
 		Name:   testName,
 		Detail: "test case",
-		Kind:   12, // 12 = SymbolKind.Struct
+		Kind:   SymbolKindStruct,
 		Range:  toRange(startPos, endPos),
 	}
 }
