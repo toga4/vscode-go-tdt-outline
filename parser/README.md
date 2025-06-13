@@ -32,7 +32,7 @@ type Test struct {
     // ...
 }
 
-tests := []Test{
+data := []Test{
     {name: "test1"},
     // ...
 }
@@ -42,11 +42,13 @@ tests := []Test{
 ```go
 type Tests []Test
 
-tests := Tests{
+scenarios := Tests{
     {name: "test1"},
     // ...
 }
 ```
+
+**注意**: 変数名に制限はありません。`name`フィールド（または互換性のあるフィールド）を持つすべての構造体スライスが検出されます。
 
 ## 実装された改善点
 

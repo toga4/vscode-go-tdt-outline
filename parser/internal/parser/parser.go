@@ -80,17 +80,8 @@ func extractTestFunction(n ast.Node, fset *token.FileSet) *Symbol {
 		return nil
 	}
 
-	// Skip non-test functions
-	// Valid: TestMyFunction, TestAPICall, Test_snake_case
-	// Invalid: testMyFunction, MyTest, BenchmarkTest
-	if !strings.HasPrefix(funcDecl.Name.String(), "Test") {
-		return nil
-	}
-
-	// Skip functions with return values
-	// Valid: func TestXxx(t *testing.T) {...}
-	// Invalid: func TestXxx(t *testing.T) error {...}
-	if funcDecl.Type.Results != nil {
+	// Skip non-test functions (requires name starts with "Test" and no return values)
+	if !strings.HasPrefix(funcDecl.Name.String(), "Test") || funcDecl.Type.Results != nil {
 		return nil
 	}
 
@@ -114,129 +105,49 @@ func extractTestFunction(n ast.Node, fset *token.FileSet) *Symbol {
 // extractTestCases finds and extracts test cases from a function body
 func extractTestCases(body *ast.BlockStmt, fset *token.FileSet) []Symbol {
 	allTestCases := []Symbol{}
-	processedLiterals := make(map[*ast.CompositeLit]bool)
 
-	// First pass: look for test table assignments
+	// Look for all composite literals
 	// Pattern examples:
-	//   tests := []struct{...}{...}     // anonymous struct slice
-	//   tests := []Test{...}            // named type slice
-	//   tests := Tests{...}             // type alias
-	//   testCases := []*TestCase{...}   // pointer slice
-	ast.Inspect(body, func(n ast.Node) bool {
-		testCases := extractTestCasesFromAssignment(n, processedLiterals, fset)
-		allTestCases = append(allTestCases, testCases...)
-		return true
-	})
-
-	// Second pass: look for inline composite literals that weren't processed in assignments
-	// Pattern examples:
-	//   for _, tc := range []struct{...}{...} { ... }
-	//   t.Run("group", func(t *testing.T) {
-	//       for _, tc := range []Test{...} { ... }
-	//   })
+	//   tests := []struct{...}{...}              // slice literal
+	//   tests := []Test{...}                     // slice of named type
+	//   tests := Tests{...}                      // type alias (e.g., type Tests []Test)
+	//   for _, tc := range []struct{...}{...}    // inline usage
 	ast.Inspect(body, func(n ast.Node) bool {
 		compLit, ok := n.(*ast.CompositeLit)
-		if !ok || processedLiterals[compLit] {
+		if !ok {
 			return true
 		}
 
-		// Check if it's a slice or array type
-		if _, isArray := compLit.Type.(*ast.ArrayType); !isArray {
-			return true
+		// Extract test cases from this composite literal
+		// We check all composite literals since we can't always determine
+		// if a type alias refers to a slice without type information
+		for _, elt := range compLit.Elts {
+			// Each element should be a struct literal
+			// Pattern: {name: "test1", input: "value", want: "expected"}
+			caseLit, ok := elt.(*ast.CompositeLit)
+			if !ok {
+				continue
+			}
+
+			testName := extractTestName(caseLit)
+			if testName == "" {
+				continue
+			}
+
+			startPos := fset.Position(caseLit.Pos())
+			endPos := fset.Position(caseLit.End())
+			allTestCases = append(allTestCases, Symbol{
+				Name:   testName,
+				Detail: "test case",
+				Kind:   SymbolKindStruct,
+				Range:  toRange(startPos, endPos),
+			})
 		}
 
-		testCases := extractTestCasesFromCompositeLit(compLit, fset)
-		allTestCases = append(allTestCases, testCases...)
 		return true
 	})
 
 	return allTestCases
-}
-
-// extractTestCasesFromAssignment extracts test cases from assignment statements
-func extractTestCasesFromAssignment(n ast.Node, processedLiterals map[*ast.CompositeLit]bool, fset *token.FileSet) []Symbol {
-	// Check if it's an assignment statement
-	// Pattern: <variable> := <value>
-	assign, ok := n.(*ast.AssignStmt)
-	if !ok {
-		return nil
-	}
-
-	// Validate assignment structure
-	// Valid: tests := ...
-	// Invalid: a, b := ..., tests, other := ...
-	if len(assign.Lhs) != 1 || len(assign.Rhs) != 1 {
-		return nil
-	}
-
-	// Check if the variable name suggests it's a test table
-	ident, ok := assign.Lhs[0].(*ast.Ident)
-	if !ok {
-		return nil
-	}
-
-	varName := strings.ToLower(ident.Name)
-	if !isTestTableVariableName(varName) {
-		return nil
-	}
-
-	// Check if RHS is a composite literal
-	// Valid patterns:
-	//   []struct{...}{...}
-	//   []Test{...}
-	//   Tests{...} (where Tests is []Test)
-	compLit, ok := assign.Rhs[0].(*ast.CompositeLit)
-	if !ok {
-		return nil
-	}
-
-	processedLiterals[compLit] = true
-	return extractTestCasesFromCompositeLit(compLit, fset)
-}
-
-// isTestTableVariableName checks if a variable name suggests it contains test cases
-func isTestTableVariableName(name string) bool {
-	// Common patterns:
-	//   tests, testCases, testcases
-	//   cases, scenarios, examples
-	//   tt (common abbreviation)
-	//   tcs (test cases abbreviation)
-	return strings.Contains(name, "test") ||
-		strings.Contains(name, "case") ||
-		strings.Contains(name, "scenario") ||
-		strings.Contains(name, "example") ||
-		name == "tt" ||
-		name == "tcs"
-}
-
-// extractTestCasesFromCompositeLit extracts test cases from a composite literal
-func extractTestCasesFromCompositeLit(compLit *ast.CompositeLit, fset *token.FileSet) []Symbol {
-	testCases := []Symbol{}
-
-	for _, elt := range compLit.Elts {
-		// Each element should be a struct literal
-		// Pattern: {name: "test1", input: "value", want: "expected"}
-		caseLit, ok := elt.(*ast.CompositeLit)
-		if !ok {
-			continue
-		}
-
-		testName := extractTestName(caseLit)
-		if testName == "" {
-			continue
-		}
-
-		startPos := fset.Position(caseLit.Pos())
-		endPos := fset.Position(caseLit.End())
-		testCases = append(testCases, Symbol{
-			Name:   testName,
-			Detail: "test case",
-			Kind:   SymbolKindStruct,
-			Range:  toRange(startPos, endPos),
-		})
-	}
-
-	return testCases
 }
 
 // extractTestName extracts the test name from a struct literal
