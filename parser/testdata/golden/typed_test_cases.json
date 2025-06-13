@@ -17,7 +17,7 @@
       {
         "name": "normal case: basic scenario",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 13,
@@ -33,7 +33,7 @@
       {
         "name": "normal case: zero value scenario",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 19,
@@ -49,7 +49,7 @@
       {
         "name": "error case: invalid input",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 25,
@@ -82,7 +82,7 @@
       {
         "name": "type alias: case 1",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 43,
@@ -98,7 +98,7 @@
       {
         "name": "type alias: case 2",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 49,
@@ -114,7 +114,7 @@
       {
         "name": "type alias: case 3",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 55,

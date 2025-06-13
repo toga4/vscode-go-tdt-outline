@@ -34,7 +34,7 @@ type Line struct {
 // VS Code SymbolKind constants
 const (
 	SymbolKindFunction = 11 // VS Code's SymbolKind.Function
-	SymbolKindStruct   = 12 // VS Code's SymbolKind.Struct
+	SymbolKindStruct   = 22 // VS Code's SymbolKind.Struct
 )
 
 // Parse analyzes a Go file and extracts test functions with their test cases

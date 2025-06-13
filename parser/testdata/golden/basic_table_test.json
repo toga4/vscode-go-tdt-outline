@@ -17,7 +17,7 @@
       {
         "name": "normal case",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 10,
@@ -33,7 +33,7 @@
       {
         "name": "zero value",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 15,

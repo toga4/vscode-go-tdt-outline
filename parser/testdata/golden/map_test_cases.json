@@ -17,7 +17,7 @@
       {
         "name": "normal case: basic scenario",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 10,
@@ -33,7 +33,7 @@
       {
         "name": "normal case: zero value",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 15,
@@ -49,7 +49,7 @@
       {
         "name": "error case: negative value",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 20,
@@ -82,7 +82,7 @@
       {
         "name": "one",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 37,
@@ -98,7 +98,7 @@
       {
         "name": "two",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 38,
@@ -114,7 +114,7 @@
       {
         "name": "three",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 39,
@@ -147,7 +147,7 @@
       {
         "name": "empty string",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 58,
@@ -163,7 +163,7 @@
       {
         "name": "hello world",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 62,
@@ -179,7 +179,7 @@
       {
         "name": "unicode",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 66,

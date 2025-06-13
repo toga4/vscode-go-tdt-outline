@@ -17,7 +17,7 @@
       {
         "name": "test1",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 8,
@@ -33,7 +33,7 @@
       {
         "name": "test2",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 9,
@@ -66,7 +66,7 @@
       {
         "name": "test3",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 20,
@@ -82,7 +82,7 @@
       {
         "name": "test4",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 21,

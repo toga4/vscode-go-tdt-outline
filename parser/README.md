@@ -86,7 +86,7 @@ The parser automatically recognizes the following field names:
       {
         "name": "normal test case",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {...}
       }
     ]

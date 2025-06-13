@@ -17,7 +17,7 @@
       {
         "name": "description field",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 11,
@@ -33,7 +33,7 @@
       {
         "name": "title field",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 12,
@@ -49,7 +49,7 @@
       {
         "name": "scenario field",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 13,
@@ -65,7 +65,7 @@
       {
         "name": "testName field",
         "detail": "test case",
-        "kind": 12,
+        "kind": 22,
         "range": {
           "start": {
             "line": 14,
