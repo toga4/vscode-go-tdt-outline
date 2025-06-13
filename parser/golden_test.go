@@ -15,6 +15,8 @@ import (
 var update = flag.Bool("update", false, "update golden files")
 
 func TestGoldenFiles(t *testing.T) {
+	t.Parallel()
+
 	// Build the parser binary
 	tmpDir := t.TempDir()
 	binaryPath := filepath.Join(tmpDir, "parser")
@@ -79,6 +81,8 @@ func TestGoldenFiles(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
 			// Run parser on the input file
 			cmd := exec.Command(binaryPath, tc.inputFile)
 			output, err := cmd.Output()
