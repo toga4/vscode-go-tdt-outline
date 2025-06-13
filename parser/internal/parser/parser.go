@@ -60,70 +60,153 @@ func Parse(filePath string) ([]Symbol, error) {
 
 	symbols := []Symbol{}
 	ast.Inspect(node, func(n ast.Node) bool {
-		// Look for function declarations starting with "Test"
-		funcDecl, ok := n.(*ast.FuncDecl)
-		if !ok {
-			return true
+		symbol := extractTestFunction(n, fset)
+		if symbol != nil {
+			symbols = append(symbols, *symbol)
+			return false // Don't traverse into this function
 		}
-
-		// Skip non-test functions
-		if !strings.HasPrefix(funcDecl.Name.String(), "Test") {
-			return true
-		}
-
-		// Skip functions with return values (test functions should not return anything)
-		if funcDecl.Type.Results != nil {
-			return true
-		}
-
-		// Extract test cases from the function body
-		testCases := extractTestCases(funcDecl.Body, fset)
-
-		if len(testCases) > 0 {
-			startPos := fset.Position(funcDecl.Pos())
-			endPos := fset.Position(funcDecl.End())
-			// Add function symbol with test cases as children
-			symbols = append(symbols, Symbol{
-				Name:     funcDecl.Name.Name,
-				Detail:   "test function",
-				Kind:     SymbolKindFunction,
-				Range:    toRange(startPos, endPos),
-				Children: testCases,
-			})
-		}
-
-		return false
+		return true
 	})
 
 	return symbols, nil
 }
 
+// extractTestFunction extracts a test function symbol if the node is a test function
+func extractTestFunction(n ast.Node, fset *token.FileSet) *Symbol {
+	// Check if node is a function declaration
+	// Pattern: func TestXxx(t *testing.T) {...}
+	funcDecl, ok := n.(*ast.FuncDecl)
+	if !ok {
+		return nil
+	}
+
+	// Skip non-test functions
+	// Valid: TestMyFunction, TestAPICall, Test_snake_case
+	// Invalid: testMyFunction, MyTest, BenchmarkTest
+	if !strings.HasPrefix(funcDecl.Name.String(), "Test") {
+		return nil
+	}
+
+	// Skip functions with return values
+	// Valid: func TestXxx(t *testing.T) {...}
+	// Invalid: func TestXxx(t *testing.T) error {...}
+	if funcDecl.Type.Results != nil {
+		return nil
+	}
+
+	// Extract test cases from the function body
+	testCases := extractTestCases(funcDecl.Body, fset)
+	if len(testCases) == 0 {
+		return nil
+	}
+
+	startPos := fset.Position(funcDecl.Pos())
+	endPos := fset.Position(funcDecl.End())
+	return &Symbol{
+		Name:     funcDecl.Name.Name,
+		Detail:   "test function",
+		Kind:     SymbolKindFunction,
+		Range:    toRange(startPos, endPos),
+		Children: testCases,
+	}
+}
+
 // extractTestCases finds and extracts test cases from a function body
 func extractTestCases(body *ast.BlockStmt, fset *token.FileSet) []Symbol {
 	allTestCases := []Symbol{}
+	processedLiterals := make(map[*ast.CompositeLit]bool)
 
+	// First pass: look for test table assignments
+	// Pattern examples:
+	//   tests := []struct{...}{...}     // anonymous struct slice
+	//   tests := []Test{...}            // named type slice
+	//   tests := Tests{...}             // type alias
+	//   testCases := []*TestCase{...}   // pointer slice
 	ast.Inspect(body, func(n ast.Node) bool {
-		// Look for slice literals (e.g., tests := []struct{...}{...})
+		testCases := extractTestCasesFromAssignment(n, processedLiterals, fset)
+		allTestCases = append(allTestCases, testCases...)
+		return true
+	})
+
+	// Second pass: look for inline composite literals that weren't processed in assignments
+	// Pattern examples:
+	//   for _, tc := range []struct{...}{...} { ... }
+	//   t.Run("group", func(t *testing.T) {
+	//       for _, tc := range []Test{...} { ... }
+	//   })
+	ast.Inspect(body, func(n ast.Node) bool {
 		compLit, ok := n.(*ast.CompositeLit)
-		if !ok {
+		if !ok || processedLiterals[compLit] {
 			return true
 		}
 
 		// Check if it's a slice or array type
-		_, isArray := compLit.Type.(*ast.ArrayType)
-		if !isArray {
+		if _, isArray := compLit.Type.(*ast.ArrayType); !isArray {
 			return true
 		}
 
-		// Process each test case (struct literal)
 		testCases := extractTestCasesFromCompositeLit(compLit, fset)
 		allTestCases = append(allTestCases, testCases...)
-
-		// Continue searching for more test tables
 		return true
 	})
 
 	return allTestCases
+}
+
+// extractTestCasesFromAssignment extracts test cases from assignment statements
+func extractTestCasesFromAssignment(n ast.Node, processedLiterals map[*ast.CompositeLit]bool, fset *token.FileSet) []Symbol {
+	// Check if it's an assignment statement
+	// Pattern: <variable> := <value>
+	assign, ok := n.(*ast.AssignStmt)
+	if !ok {
+		return nil
+	}
+
+	// Validate assignment structure
+	// Valid: tests := ...
+	// Invalid: a, b := ..., tests, other := ...
+	if len(assign.Lhs) != 1 || len(assign.Rhs) != 1 {
+		return nil
+	}
+
+	// Check if the variable name suggests it's a test table
+	ident, ok := assign.Lhs[0].(*ast.Ident)
+	if !ok {
+		return nil
+	}
+
+	varName := strings.ToLower(ident.Name)
+	if !isTestTableVariableName(varName) {
+		return nil
+	}
+
+	// Check if RHS is a composite literal
+	// Valid patterns:
+	//   []struct{...}{...}
+	//   []Test{...}
+	//   Tests{...} (where Tests is []Test)
+	compLit, ok := assign.Rhs[0].(*ast.CompositeLit)
+	if !ok {
+		return nil
+	}
+
+	processedLiterals[compLit] = true
+	return extractTestCasesFromCompositeLit(compLit, fset)
+}
+
+// isTestTableVariableName checks if a variable name suggests it contains test cases
+func isTestTableVariableName(name string) bool {
+	// Common patterns:
+	//   tests, testCases, testcases
+	//   cases, scenarios, examples
+	//   tt (common abbreviation)
+	//   tcs (test cases abbreviation)
+	return strings.Contains(name, "test") ||
+		strings.Contains(name, "case") ||
+		strings.Contains(name, "scenario") ||
+		strings.Contains(name, "example") ||
+		name == "tt" ||
+		name == "tcs"
 }
 
 // extractTestCasesFromCompositeLit extracts test cases from a composite literal
@@ -131,22 +214,26 @@ func extractTestCasesFromCompositeLit(compLit *ast.CompositeLit, fset *token.Fil
 	testCases := []Symbol{}
 
 	for _, elt := range compLit.Elts {
+		// Each element should be a struct literal
+		// Pattern: {name: "test1", input: "value", want: "expected"}
 		caseLit, ok := elt.(*ast.CompositeLit)
 		if !ok {
 			continue
 		}
 
 		testName := extractTestName(caseLit)
-		if testName != "" {
-			startPos := fset.Position(caseLit.Pos())
-			endPos := fset.Position(caseLit.End())
-			testCases = append(testCases, Symbol{
-				Name:   testName,
-				Detail: "test case",
-				Kind:   SymbolKindStruct,
-				Range:  toRange(startPos, endPos),
-			})
+		if testName == "" {
+			continue
 		}
+
+		startPos := fset.Position(caseLit.Pos())
+		endPos := fset.Position(caseLit.End())
+		testCases = append(testCases, Symbol{
+			Name:   testName,
+			Detail: "test case",
+			Kind:   SymbolKindStruct,
+			Range:  toRange(startPos, endPos),
+		})
 	}
 
 	return testCases
@@ -155,25 +242,47 @@ func extractTestCasesFromCompositeLit(compLit *ast.CompositeLit, fset *token.Fil
 // extractTestName extracts the test name from a struct literal
 func extractTestName(caseLit *ast.CompositeLit) string {
 	for _, kv := range caseLit.Elts {
+		// Skip non-key-value expressions
+		// This handles both:
+		//   {name: "test1", ...}     // key-value form
+		//   {"test1", ...}           // positional form (skip)
 		kve, ok := kv.(*ast.KeyValueExpr)
 		if !ok {
 			continue
 		}
 
+		// Check if the key is an identifier
 		ident, ok := kve.Key.(*ast.Ident)
 		if !ok {
 			continue
 		}
 
 		// Check if the field name is one of the common test name fields
-		if slices.ContainsFunc(testNameFields, func(fieldName string) bool { return strings.EqualFold(ident.Name, fieldName) }) {
-			if basicLit, ok := kve.Value.(*ast.BasicLit); ok && basicLit.Kind == token.STRING {
-				return strings.Trim(basicLit.Value, `"`)
-			}
+		// Examples: name, testName, desc, description, title, scenario
+		if !isTestNameField(ident.Name) {
+			continue
 		}
+
+		// Extract string literal value
+		// Pattern: "test case name"
+		basicLit, ok := kve.Value.(*ast.BasicLit)
+		if !ok || basicLit.Kind != token.STRING {
+			continue
+		}
+
+		// Remove quotes from string literal
+		// "test name" -> test name
+		return strings.Trim(basicLit.Value, `"`)
 	}
 
 	return ""
+}
+
+// isTestNameField checks if a field name is commonly used for test case names
+func isTestNameField(fieldName string) bool {
+	return slices.ContainsFunc(testNameFields, func(name string) bool {
+		return strings.EqualFold(fieldName, name)
+	})
 }
 
 // toRange converts token positions to VS Code range format (0-indexed)

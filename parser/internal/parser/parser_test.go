@@ -200,6 +200,57 @@ func TestParse(t *testing.T) {
 			want:     nil,
 			wantErr:  true,
 		},
+		{
+			name:     "型定義されたテストケース",
+			filePath: "testdata/typed_test_cases.go",
+			want: []Symbol{
+				{
+					Name:   "TestTypedStruct",
+					Detail: "test function",
+					Kind:   SymbolKindFunction,
+					Children: []Symbol{
+						{
+							Name:   "正常系: 基本的なケース",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "正常系: ゼロ値のケース",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "異常系: 不正な入力",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+					},
+				},
+				{
+					Name:   "TestTypeAlias",
+					Detail: "test function",
+					Kind:   SymbolKindFunction,
+					Children: []Symbol{
+						{
+							Name:   "型エイリアス: ケース1",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "型エイリアス: ケース2",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "型エイリアス: ケース3",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {

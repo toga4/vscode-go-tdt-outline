@@ -12,6 +12,42 @@ go run ./parser <test_file.go>
 go run ./parser <test_file.go> | jq '.'
 ```
 
+## 対応するテストパターン
+
+### 1. 匿名構造体のスライス
+```go
+tests := []struct {
+    name string
+    // ...
+}{
+    {name: "test1"},
+    // ...
+}
+```
+
+### 2. 型定義された構造体のスライス
+```go
+type Test struct {
+    name string
+    // ...
+}
+
+tests := []Test{
+    {name: "test1"},
+    // ...
+}
+```
+
+### 3. 型エイリアスを使用
+```go
+type Tests []Test
+
+tests := Tests{
+    {name: "test1"},
+    // ...
+}
+```
+
 ## 実装された改善点
 
 ### 1. エラーハンドリングの改善
@@ -26,6 +62,7 @@ go run ./parser <test_file.go> | jq '.'
 - 複数のフィールド名をサポート: `name`, `testName`, `desc`, `description`, `title`, `scenario`
 - 大文字小文字を区別しない比較（`strings.EqualFold`）
 - 複数のテストテーブルに対応
+- 型定義されたテストケースに対応
 
 ### 4. コード品質の向上
 - 包括的なコメントを追加
@@ -37,6 +74,7 @@ go run ./parser <test_file.go> | jq '.'
 - 複数のテスト関数とテストテーブル
 - エラーケースの検証
 - 様々なフィールド名のサポート確認
+- 型定義されたテストケースの検証
 
 ## 出力形式
 
@@ -61,18 +99,17 @@ go run ./parser <test_file.go> | jq '.'
 
 ## 今後の拡張案
 
-### 1. 型定義されたテストケースへの対応
-現在、以下のようなパターンには対応していません：
+### 1. より複雑な型定義への対応
+現在対応していない複雑なパターン：
 ```go
-type Tests []struct {
-    name string
-    // ...
+// パッケージ外の型を使用
+tests := []somepackage.TestCase{
+    {Name: "test1"},
 }
 
-func TestExample(t *testing.T) {
-    tests := Tests{
-        {name: "test1"},
-    }
+// インターフェースを含む複雑な型定義
+type TestCase interface {
+    Name() string
 }
 ```
 
