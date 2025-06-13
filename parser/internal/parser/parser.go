@@ -41,11 +41,14 @@ func Parse(filePath string) ([]Symbol, error) {
 	if filePath == "" {
 		return nil, fmt.Errorf("file path cannot be empty")
 	}
+	if !strings.HasSuffix(filePath, ".go") {
+		return nil, fmt.Errorf("file must have .go extension: %s", filePath)
+	}
 
 	fset := token.NewFileSet()
 	node, err := parser.ParseFile(fset, filePath, nil, 0)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse file %s: %w", filePath, err)
+		return nil, fmt.Errorf("failed to parse Go file %s: %w", filePath, err)
 	}
 
 	symbols := []Symbol{}

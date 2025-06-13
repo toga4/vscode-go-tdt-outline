@@ -324,6 +324,18 @@ func TestParse(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name:     "non-go file extension",
+			filePath: "testdata/basic_table_test.txt",
+			want:     nil,
+			wantErr:  true,
+		},
+		{
+			name:     "file without extension",
+			filePath: "testdata/basic_table_test",
+			want:     nil,
+			wantErr:  true,
+		},
 	}
 
 	for _, tt := range tests {
