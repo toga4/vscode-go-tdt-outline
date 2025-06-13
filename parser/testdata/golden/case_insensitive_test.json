@@ -15,7 +15,7 @@
     },
     "children": [
       {
-        "name": "大文字NAME",
+        "name": "uppercase NAME",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -25,13 +25,13 @@
           },
           "end": {
             "line": 10,
-            "character": 25
+            "character": 26
           }
         },
         "children": null
       },
       {
-        "name": "混合Name",
+        "name": "mixed case Name",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -41,13 +41,13 @@
           },
           "end": {
             "line": 11,
-            "character": 22
+            "character": 27
           }
         },
         "children": null
       },
       {
-        "name": "小文字name",
+        "name": "lowercase name",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -57,7 +57,7 @@
           },
           "end": {
             "line": 12,
-            "character": 25
+            "character": 26
           }
         },
         "children": null

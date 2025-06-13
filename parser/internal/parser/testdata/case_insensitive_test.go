@@ -8,8 +8,8 @@ func TestCaseInsensitive(t *testing.T) {
 		Name string
 		name string
 	}{
-		{NAME: "大文字NAME"},
-		{Name: "混合Name"},
-		{name: "小文字name"},
+		{NAME: "uppercase NAME"},
+		{Name: "mixed case Name"},
+		{name: "lowercase name"},
 	}
 }

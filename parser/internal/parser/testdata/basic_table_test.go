@@ -9,12 +9,12 @@ func TestExample(t *testing.T) {
 		want  int
 	}{
 		{
-			name:  "正常系",
+			name:  "normal case",
 			input: 1,
 			want:  1,
 		},
 		{
-			name:  "ゼロ値",
+			name:  "zero value",
 			input: 0,
 			want:  0,
 		},

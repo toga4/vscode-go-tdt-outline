@@ -15,7 +15,7 @@
     },
     "children": [
       {
-        "name": "正常系: 基本的なケース",
+        "name": "normal case: basic scenario",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -31,7 +31,7 @@
         "children": null
       },
       {
-        "name": "正常系: ゼロ値のケース",
+        "name": "normal case: zero value scenario",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -47,7 +47,7 @@
         "children": null
       },
       {
-        "name": "異常系: 不正な入力",
+        "name": "error case: invalid input",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -80,7 +80,7 @@
     },
     "children": [
       {
-        "name": "型エイリアス: ケース1",
+        "name": "type alias: case 1",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -96,7 +96,7 @@
         "children": null
       },
       {
-        "name": "型エイリアス: ケース2",
+        "name": "type alias: case 2",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -112,7 +112,7 @@
         "children": null
       },
       {
-        "name": "型エイリアス: ケース3",
+        "name": "type alias: case 3",
         "detail": "test case",
         "kind": 12,
         "range": {

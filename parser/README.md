@@ -1,20 +1,20 @@
 # Go TDD Outline Parser
 
-GoのテストファイルからVS Code用のアウトラインシンボルを生成するパーサーです。テーブル駆動テストのテストケースを個別のシンボルとして認識し、VS Codeのアウトラインビューで階層的に表示できます。
+A parser that generates VS Code outline symbols from Go test files. It recognizes test cases from table-driven tests as individual symbols and displays them hierarchically in VS Code's outline view.
 
-## 使用方法
+## Usage
 
 ```bash
-# パーサーの実行
+# Execute the parser
 go run ./parser <test_file.go>
 
-# JSON形式で出力される結果を整形して表示
+# Display formatted JSON output
 go run ./parser <test_file.go> | jq '.'
 ```
 
-## 対応するテストパターン
+## Supported Test Patterns
 
-### 1. 匿名構造体のスライス
+### 1. Slice of Anonymous Structs
 ```go
 tests := []struct {
     name string
@@ -25,7 +25,7 @@ tests := []struct {
 }
 ```
 
-### 2. 型定義された構造体のスライス
+### 2. Slice of Named Structs
 ```go
 type Test struct {
     name string
@@ -38,7 +38,7 @@ data := []Test{
 }
 ```
 
-### 3. 型エイリアスを使用
+### 3. Using Type Aliases
 ```go
 type Tests []Test
 
@@ -48,57 +48,57 @@ scenarios := Tests{
 }
 ```
 
-### 4. map型のテストケース
+### 4. Map-based Test Cases
 ```go
-// 構造体をvalueに持つmap
+// Map with struct values
 tests := map[string]struct {
     input int
     want  int
 }{
-    "正常系": {input: 1, want: 2},
-    "異常系": {input: -1, want: -1},
+    "normal case": {input: 1, want: 2},
+    "error case":  {input: -1, want: -1},
 }
 
-// シンプルなmap
+// Simple map
 cases := map[string]int{
     "one": 1,
     "two": 2,
 }
 ```
 
-**注意**: 
-- スライス型の場合、変数名に制限はありません。`name`フィールド（または互換性のあるフィールド）を持つすべての構造体スライスが検出されます。
-- map型の場合、文字列キーを持つmapのキーがテストケース名として使用されます。
+**Note**: 
+- For slice types, there are no restrictions on variable names. All struct slices with a `name` field (or compatible fields) are detected.
+- For map types, string keys are used as test case names.
 
-## 実装された改善点
+## Implemented Improvements
 
-### 1. エラーハンドリングの改善
-- `log.Fatal`の代わりに適切なエラー返却を実装
-- ファイルパスの検証を追加（空文字列、非Goファイルのチェック）
+### 1. Enhanced Error Handling
+- Replaced `log.Fatal` with proper error returns
+- Added file path validation (empty string and non-Go file checks)
 
-### 2. パニック防止
-- 文字列のインデックスアクセスを`strings.HasPrefix`に変更
-- より安全な実装に改善
+### 2. Panic Prevention
+- Changed string index access to `strings.HasPrefix`
+- Improved implementation for safer execution
 
-### 3. より柔軟なテストケース認識
-- 複数のフィールド名をサポート: `name`, `testName`, `desc`, `description`, `title`, `scenario`
-- 大文字小文字を区別しない比較（`strings.EqualFold`）
-- 複数のテストテーブルに対応
-- 型定義されたテストケースに対応
+### 3. More Flexible Test Case Recognition
+- Support for multiple field names: `name`, `testName`, `desc`, `description`, `title`, `scenario`
+- Case-insensitive comparison using `strings.EqualFold`
+- Support for multiple test tables
+- Support for typed test cases
 
-### 4. コード品質の向上
-- 包括的なコメントを追加
-- 定数の定義（`SymbolKindFunction`, `SymbolKindStruct`）
-- 関数の責務を明確に分離
+### 4. Improved Code Quality
+- Added comprehensive comments
+- Defined constants (`SymbolKindFunction`, `SymbolKindStruct`)
+- Clear separation of function responsibilities
 
-### 5. テストの追加
-- 基本的なテーブル駆動テストの解析
-- 複数のテスト関数とテストテーブル
-- エラーケースの検証
-- 様々なフィールド名のサポート確認
-- 型定義されたテストケースの検証
+### 5. Added Tests
+- Basic table-driven test parsing
+- Multiple test functions and test tables
+- Error case validation
+- Support verification for various field names
+- Validation of typed test cases
 
-## 出力形式
+## Output Format
 
 ```json
 [
@@ -109,7 +109,7 @@ cases := map[string]int{
     "range": {...},
     "children": [
       {
-        "name": "正常系テストケース",
+        "name": "normal test case",
         "detail": "test case",
         "kind": 12,
         "range": {...}
@@ -119,79 +119,79 @@ cases := map[string]int{
 ]
 ```
 
-## 今後の拡張案
+## Future Enhancement Ideas
 
-### 1. より複雑な型定義への対応
-現在対応していない複雑なパターン：
+### 1. Support for Complex Type Definitions
+Currently unsupported complex patterns:
 ```go
-// パッケージ外の型を使用
+// Using types from external packages
 tests := []somepackage.TestCase{
     {Name: "test1"},
 }
 
-// インターフェースを含む複雑な型定義
+// Complex type definitions with interfaces
 type TestCase interface {
     Name() string
 }
 ```
 
-### 2. サブテストへの対応
-ネストしたt.Runによるサブテストの階層構造の認識
+### 2. Subtest Support
+Recognition of hierarchical structures from nested t.Run subtests
 
-### 3. パフォーマンス最適化
-大規模なテストファイルに対する処理速度の改善
+### 3. Performance Optimization
+Improved processing speed for large test files
 
-### 4. カスタマイズ可能な設定
-- 認識するフィールド名の設定
-- 出力フォーマットの選択
-- フィルタリング機能
+### 4. Customizable Configuration
+- Configurable field names for recognition
+- Output format selection
+- Filtering functionality
 
-## 開発
+## Development
 
-### テストの実行
+### Running Tests
 
 ```bash
-# すべてのテストを実行
+# Run all tests
 cd parser
 go test ./...
 
-# カバレッジ付きでテストを実行
+# Run tests with coverage
 go test -cover ./...
 
-# 特定のテストを実行
+# Run specific tests
 go test -run TestParse ./internal/parser
 ```
 
 ### Golden File Testing
 
-このプロジェクトでは、JSON出力の変更を追跡するためにGolden File Testingを使用しています。
+This project uses Golden File Testing to track JSON output changes.
 
 ```bash
-# Golden file testを実行（現在の出力と比較）
+# Run golden file tests (compare with current output)
 cd parser
 go test -run TestGoldenFiles
 
-# Golden fileを更新（出力フォーマットを変更した場合）
+# Update golden files (when output format changes)
 go test -run TestGoldenFiles -update
 
-# 特定のケースのみテスト
+# Test specific cases only
 go test -run "TestGoldenFiles/map_test_cases$"
 ```
 
-Golden fileは`parser/testdata/golden/`ディレクトリに保存されています。
+Golden files are stored in the `parser/testdata/golden/` directory.
 
-#### なぜGolden File Testingを使うのか？
+#### Why Use Golden File Testing?
 
-1. **JSON出力の可視化**: TypeScriptの拡張機能が期待する正確なJSON形式を確認できます
-2. **変更の追跡**: コードの変更がJSON出力にどう影響するかを明確に把握できます
-3. **後方互換性**: 意図しない出力フォーマットの変更を防ぎます
+1. **JSON Output Visualization**: Verify the exact JSON format expected by TypeScript extensions
+2. **Change Tracking**: Clearly understand how code changes affect JSON output
+3. **Backward Compatibility**: Prevent unintended output format changes
 
-### 実行例
+### Usage Examples
 
 ```bash
-# パーサーの動作確認
+# Verify parser operation
 go run ./parser ./parser/internal/parser/testdata/map_test_cases.go | jq '.'
 
-# 出力の一部を確認
+# Check part of the output
 go run ./parser <file.go> | jq '.[0].children | map(.name)'
 ``` 

@@ -3,7 +3,7 @@ package main_test
 import "testing"
 
 func TestMultipleTables(t *testing.T) {
-	// First table
+	// First test table
 	tests1 := []struct {
 		name string
 	}{
@@ -11,7 +11,7 @@ func TestMultipleTables(t *testing.T) {
 		{name: "table1-test2"},
 	}
 
-	// Second table
+	// Second test table
 	tests2 := []struct {
 		name string
 	}{

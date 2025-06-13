@@ -8,17 +8,17 @@ func TestWithMap(t *testing.T) {
 		expected int
 		wantErr  bool
 	}{
-		"正常系: 基本的なケース": {
+		"normal case: basic scenario": {
 			input:    1,
 			expected: 2,
 			wantErr:  false,
 		},
-		"正常系: ゼロ値": {
+		"normal case: zero value": {
 			input:    0,
 			expected: 0,
 			wantErr:  false,
 		},
-		"異常系: 負の値": {
+		"error case: negative value": {
 			input:    -1,
 			expected: -1,
 			wantErr:  true,
@@ -32,7 +32,7 @@ func TestWithMap(t *testing.T) {
 	}
 }
 
-// シンプルなmap定義
+// Simple map definition
 func TestSimpleMap(t *testing.T) {
 	cases := map[string]int{
 		"one":   1,
@@ -48,7 +48,7 @@ func TestSimpleMap(t *testing.T) {
 	}
 }
 
-// 型定義を使用したmap
+// Map using type definition
 type TestCase struct {
 	input string
 	want  string
@@ -65,8 +65,8 @@ func TestTypedMap(t *testing.T) {
 			want:  "HELLO",
 		},
 		"unicode": {
-			input: "こんにちは",
-			want:  "こんにちは",
+			input: "hello world",
+			want:  "HELLO WORLD",
 		},
 	}
 

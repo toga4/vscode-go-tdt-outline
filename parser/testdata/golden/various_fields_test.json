@@ -15,7 +15,7 @@
     },
     "children": [
       {
-        "name": "説明フィールド",
+        "name": "description field",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -25,13 +25,13 @@
           },
           "end": {
             "line": 11,
-            "character": 40
+            "character": 36
           }
         },
         "children": null
       },
       {
-        "name": "タイトルフィールド",
+        "name": "title field",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -41,13 +41,13 @@
           },
           "end": {
             "line": 12,
-            "character": 40
+            "character": 24
           }
         },
         "children": null
       },
       {
-        "name": "シナリオフィールド",
+        "name": "scenario field",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -57,13 +57,13 @@
           },
           "end": {
             "line": 13,
-            "character": 43
+            "character": 30
           }
         },
         "children": null
       },
       {
-        "name": "テスト名フィールド",
+        "name": "testName field",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -73,7 +73,7 @@
           },
           "end": {
             "line": 14,
-            "character": 43
+            "character": 30
           }
         },
         "children": null

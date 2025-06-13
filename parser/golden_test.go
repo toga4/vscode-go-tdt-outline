@@ -24,7 +24,7 @@ func TestGoldenFiles(t *testing.T) {
 		t.Fatalf("Failed to build parser: %v\nOutput: %s", err, output)
 	}
 
-	// Test cases
+	// Test cases for golden file testing
 	testCases := []struct {
 		name       string
 		inputFile  string
@@ -36,17 +36,17 @@ func TestGoldenFiles(t *testing.T) {
 			goldenFile: "testdata/golden/basic_table_test.json",
 		},
 		{
-			name:       "multiple functions",
+			name:       "multiple test functions",
 			inputFile:  "internal/parser/testdata/multiple_functions_test.go",
 			goldenFile: "testdata/golden/multiple_functions_test.json",
 		},
 		{
-			name:       "various fields",
+			name:       "various field names",
 			inputFile:  "internal/parser/testdata/various_fields_test.go",
 			goldenFile: "testdata/golden/various_fields_test.json",
 		},
 		{
-			name:       "multiple tables",
+			name:       "multiple test tables",
 			inputFile:  "internal/parser/testdata/multiple_tables_test.go",
 			goldenFile: "testdata/golden/multiple_tables_test.json",
 		},
@@ -61,7 +61,7 @@ func TestGoldenFiles(t *testing.T) {
 			goldenFile: "testdata/golden/no_name_field_test.json",
 		},
 		{
-			name:       "case insensitive",
+			name:       "case insensitive matching",
 			inputFile:  "internal/parser/testdata/case_insensitive_test.go",
 			goldenFile: "testdata/golden/case_insensitive_test.json",
 		},
@@ -71,7 +71,7 @@ func TestGoldenFiles(t *testing.T) {
 			goldenFile: "testdata/golden/typed_test_cases.json",
 		},
 		{
-			name:       "map test cases",
+			name:       "map based test cases",
 			inputFile:  "internal/parser/testdata/map_test_cases.go",
 			goldenFile: "testdata/golden/map_test_cases.json",
 		},
@@ -79,7 +79,7 @@ func TestGoldenFiles(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			// Run parser
+			// Run parser on the input file
 			cmd := exec.Command(binaryPath, tc.inputFile)
 			output, err := cmd.Output()
 			if err != nil {

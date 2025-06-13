@@ -15,7 +15,7 @@ func TestParse(t *testing.T) {
 		wantErr  bool
 	}{
 		{
-			name:     "基本的なテーブル駆動テスト",
+			name:     "basic table-driven test",
 			filePath: "testdata/basic_table_test.go",
 			want: []Symbol{
 				{
@@ -24,12 +24,12 @@ func TestParse(t *testing.T) {
 					Kind:   11,
 					Children: []Symbol{
 						{
-							Name:   "正常系",
+							Name:   "normal case",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "ゼロ値",
+							Name:   "zero value",
 							Detail: "test case",
 							Kind:   12,
 						},
@@ -39,7 +39,7 @@ func TestParse(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:     "複数のテスト関数",
+			name:     "multiple test functions",
 			filePath: "testdata/multiple_functions_test.go",
 			want: []Symbol{
 				{
@@ -80,7 +80,7 @@ func TestParse(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:     "異なるフィールド名のサポート",
+			name:     "support for various field names",
 			filePath: "testdata/various_fields_test.go",
 			want: []Symbol{
 				{
@@ -89,22 +89,22 @@ func TestParse(t *testing.T) {
 					Kind:   11,
 					Children: []Symbol{
 						{
-							Name:   "説明フィールド",
+							Name:   "description field",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "タイトルフィールド",
+							Name:   "title field",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "シナリオフィールド",
+							Name:   "scenario field",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "テスト名フィールド",
+							Name:   "testName field",
 							Detail: "test case",
 							Kind:   12,
 						},
@@ -114,7 +114,7 @@ func TestParse(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:     "複数のテストテーブル",
+			name:     "multiple test tables",
 			filePath: "testdata/multiple_tables_test.go",
 			want: []Symbol{
 				{
@@ -148,19 +148,19 @@ func TestParse(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:     "テスト関数ではない関数は無視",
+			name:     "non-test functions are ignored",
 			filePath: "testdata/non_test_functions.go",
 			want:     []Symbol{},
 			wantErr:  false,
 		},
 		{
-			name:     "nameフィールドがないテストケースは無視",
+			name:     "test cases without name field are ignored",
 			filePath: "testdata/no_name_field_test.go",
-			want:     []Symbol{}, // nameフィールドがないため、テスト関数も出力されない
+			want:     []Symbol{}, // No test function output because there's no name field
 			wantErr:  false,
 		},
 		{
-			name:     "大文字小文字を区別しない",
+			name:     "case insensitive field matching",
 			filePath: "testdata/case_insensitive_test.go",
 			want: []Symbol{
 				{
@@ -169,17 +169,17 @@ func TestParse(t *testing.T) {
 					Kind:   11,
 					Children: []Symbol{
 						{
-							Name:   "大文字NAME",
+							Name:   "uppercase NAME",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "混合Name",
+							Name:   "mixed case Name",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "小文字name",
+							Name:   "lowercase name",
 							Detail: "test case",
 							Kind:   12,
 						},
@@ -189,19 +189,19 @@ func TestParse(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:     "空のファイルパス",
+			name:     "empty file path",
 			filePath: "",
 			want:     nil,
 			wantErr:  true,
 		},
 		{
-			name:     "存在しないファイル",
+			name:     "non-existent file",
 			filePath: "testdata/non_existent.go",
 			want:     nil,
 			wantErr:  true,
 		},
 		{
-			name:     "型定義されたテストケース",
+			name:     "typed test cases",
 			filePath: "testdata/typed_test_cases.go",
 			want: []Symbol{
 				{
@@ -210,17 +210,17 @@ func TestParse(t *testing.T) {
 					Kind:   11,
 					Children: []Symbol{
 						{
-							Name:   "正常系: 基本的なケース",
+							Name:   "normal case: basic scenario",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "正常系: ゼロ値のケース",
+							Name:   "normal case: zero value scenario",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "異常系: 不正な入力",
+							Name:   "error case: invalid input",
 							Detail: "test case",
 							Kind:   12,
 						},
@@ -232,17 +232,17 @@ func TestParse(t *testing.T) {
 					Kind:   11,
 					Children: []Symbol{
 						{
-							Name:   "型エイリアス: ケース1",
+							Name:   "type alias: case 1",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "型エイリアス: ケース2",
+							Name:   "type alias: case 2",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "型エイリアス: ケース3",
+							Name:   "type alias: case 3",
 							Detail: "test case",
 							Kind:   12,
 						},
@@ -252,7 +252,7 @@ func TestParse(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:     "map型のテストケース",
+			name:     "map-based test cases",
 			filePath: "testdata/map_test_cases.go",
 			want: []Symbol{
 				{
@@ -261,17 +261,17 @@ func TestParse(t *testing.T) {
 					Kind:   11,
 					Children: []Symbol{
 						{
-							Name:   "正常系: 基本的なケース",
+							Name:   "normal case: basic scenario",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "正常系: ゼロ値",
+							Name:   "normal case: zero value",
 							Detail: "test case",
 							Kind:   12,
 						},
 						{
-							Name:   "異常系: 負の値",
+							Name:   "error case: negative value",
 							Detail: "test case",
 							Kind:   12,
 						},

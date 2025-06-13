@@ -9,9 +9,9 @@ func TestVariousFields(t *testing.T) {
 		scenario    string
 		testName    string
 	}{
-		{description: "説明フィールド"},
-		{title: "タイトルフィールド"},
-		{scenario: "シナリオフィールド"},
-		{testName: "テスト名フィールド"},
+		{description: "description field"},
+		{title: "title field"},
+		{scenario: "scenario field"},
+		{testName: "testName field"},
 	}
 }

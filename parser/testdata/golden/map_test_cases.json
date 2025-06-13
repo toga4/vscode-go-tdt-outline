@@ -15,7 +15,7 @@
     },
     "children": [
       {
-        "name": "正常系: 基本的なケース",
+        "name": "normal case: basic scenario",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -31,7 +31,7 @@
         "children": null
       },
       {
-        "name": "正常系: ゼロ値",
+        "name": "normal case: zero value",
         "detail": "test case",
         "kind": 12,
         "range": {
@@ -47,7 +47,7 @@
         "children": null
       },
       {
-        "name": "異常系: 負の値",
+        "name": "error case: negative value",
         "detail": "test case",
         "kind": 12,
         "range": {
