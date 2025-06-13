@@ -338,6 +338,40 @@ func TestParse(t *testing.T) {
 			want:     nil,
 			wantErr:  true,
 		},
+		{
+			name:     "backtick strings",
+			filePath: "testdata/backtick_strings_test.go",
+			want: []Symbol{
+				{
+					Name:   "TestBacktickStrings",
+					Detail: "test function",
+					Kind:   SymbolKindFunction,
+					Children: []Symbol{
+						{
+							Name:   "double quote string",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "backtick string",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   `backtick with "quotes"`,
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "backtick with\nnewlines",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {

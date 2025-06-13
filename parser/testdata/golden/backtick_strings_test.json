@@ -1,0 +1,83 @@
+[
+  {
+    "name": "TestBacktickStrings",
+    "detail": "test function",
+    "kind": 11,
+    "range": {
+      "start": {
+        "line": 4,
+        "character": 0
+      },
+      "end": {
+        "line": 38,
+        "character": 1
+      }
+    },
+    "children": [
+      {
+        "name": "double quote string",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 2
+          },
+          "end": {
+            "line": 14,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "backtick string",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 2
+          },
+          "end": {
+            "line": 19,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "backtick with \"quotes\"",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 2
+          },
+          "end": {
+            "line": 24,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "backtick with\nnewlines",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 25,
+            "character": 2
+          },
+          "end": {
+            "line": 30,
+            "character": 3
+          }
+        },
+        "children": null
+      }
+    ]
+  }
+]

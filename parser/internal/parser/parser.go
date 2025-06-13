@@ -6,6 +6,7 @@ import (
 	"go/parser"
 	"go/token"
 	"slices"
+	"strconv"
 	"strings"
 )
 
@@ -246,7 +247,13 @@ func extractStringLiteral(expr ast.Expr) (string, bool) {
 	if !ok || basicLit.Kind != token.STRING {
 		return "", false
 	}
-	return strings.Trim(basicLit.Value, `"`), true
+
+	unquoted, err := strconv.Unquote(basicLit.Value)
+	if err != nil {
+		return "", false
+	}
+
+	return unquoted, true
 }
 
 // toRange converts token positions to VS Code range format (0-indexed)

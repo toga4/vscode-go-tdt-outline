@@ -77,6 +77,11 @@ func TestGoldenFiles(t *testing.T) {
 			inputFile:  "internal/parser/testdata/map_test_cases.go",
 			goldenFile: "testdata/golden/map_test_cases.json",
 		},
+		{
+			name:       "backtick strings",
+			inputFile:  "internal/parser/testdata/backtick_strings_test.go",
+			goldenFile: "testdata/golden/backtick_strings_test.json",
+		},
 	}
 
 	for _, tc := range testCases {
