@@ -1,0 +1,132 @@
+[
+  {
+    "name": "TestTypedStruct",
+    "detail": "test function",
+    "kind": 11,
+    "range": {
+      "start": {
+        "line": 11,
+        "character": 0
+      },
+      "end": {
+        "line": 37,
+        "character": 1
+      }
+    },
+    "children": [
+      {
+        "name": "正常系: 基本的なケース",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 2
+          },
+          "end": {
+            "line": 18,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "正常系: ゼロ値のケース",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 2
+          },
+          "end": {
+            "line": 24,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "異常系: 不正な入力",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 25,
+            "character": 2
+          },
+          "end": {
+            "line": 30,
+            "character": 3
+          }
+        },
+        "children": null
+      }
+    ]
+  },
+  {
+    "name": "TestTypeAlias",
+    "detail": "test function",
+    "kind": 11,
+    "range": {
+      "start": {
+        "line": 41,
+        "character": 0
+      },
+      "end": {
+        "line": 67,
+        "character": 1
+      }
+    },
+    "children": [
+      {
+        "name": "型エイリアス: ケース1",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 43,
+            "character": 2
+          },
+          "end": {
+            "line": 48,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "型エイリアス: ケース2",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 49,
+            "character": 2
+          },
+          "end": {
+            "line": 54,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "型エイリアス: ケース3",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 55,
+            "character": 2
+          },
+          "end": {
+            "line": 60,
+            "character": 3
+          }
+        },
+        "children": null
+      }
+    ]
+  }
+]

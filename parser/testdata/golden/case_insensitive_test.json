@@ -1,0 +1,67 @@
+[
+  {
+    "name": "TestCaseInsensitive",
+    "detail": "test function",
+    "kind": 11,
+    "range": {
+      "start": {
+        "line": 4,
+        "character": 0
+      },
+      "end": {
+        "line": 14,
+        "character": 1
+      }
+    },
+    "children": [
+      {
+        "name": "大文字NAME",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 2
+          },
+          "end": {
+            "line": 10,
+            "character": 25
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "混合Name",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 2
+          },
+          "end": {
+            "line": 11,
+            "character": 22
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "小文字name",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 12,
+            "character": 2
+          },
+          "end": {
+            "line": 12,
+            "character": 25
+          }
+        },
+        "children": null
+      }
+    ]
+  }
+]

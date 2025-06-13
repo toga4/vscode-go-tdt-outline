@@ -1,0 +1,51 @@
+[
+  {
+    "name": "TestExample",
+    "detail": "test function",
+    "kind": 11,
+    "range": {
+      "start": {
+        "line": 4,
+        "character": 0
+      },
+      "end": {
+        "line": 26,
+        "character": 1
+      }
+    },
+    "children": [
+      {
+        "name": "正常系",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 2
+          },
+          "end": {
+            "line": 14,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "ゼロ値",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 2
+          },
+          "end": {
+            "line": 19,
+            "character": 3
+          }
+        },
+        "children": null
+      }
+    ]
+  }
+]

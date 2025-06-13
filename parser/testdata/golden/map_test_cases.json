@@ -1,0 +1,197 @@
+[
+  {
+    "name": "TestWithMap",
+    "detail": "test function",
+    "kind": 11,
+    "range": {
+      "start": {
+        "line": 4,
+        "character": 0
+      },
+      "end": {
+        "line": 32,
+        "character": 1
+      }
+    },
+    "children": [
+      {
+        "name": "正常系: 基本的なケース",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 2
+          },
+          "end": {
+            "line": 14,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "正常系: ゼロ値",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 15,
+            "character": 2
+          },
+          "end": {
+            "line": 19,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "異常系: 負の値",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 20,
+            "character": 2
+          },
+          "end": {
+            "line": 24,
+            "character": 3
+          }
+        },
+        "children": null
+      }
+    ]
+  },
+  {
+    "name": "TestSimpleMap",
+    "detail": "test function",
+    "kind": 11,
+    "range": {
+      "start": {
+        "line": 35,
+        "character": 0
+      },
+      "end": {
+        "line": 48,
+        "character": 1
+      }
+    },
+    "children": [
+      {
+        "name": "one",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 37,
+            "character": 2
+          },
+          "end": {
+            "line": 37,
+            "character": 12
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "two",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 38,
+            "character": 2
+          },
+          "end": {
+            "line": 38,
+            "character": 12
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "three",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 39,
+            "character": 2
+          },
+          "end": {
+            "line": 39,
+            "character": 12
+          }
+        },
+        "children": null
+      }
+    ]
+  },
+  {
+    "name": "TestTypedMap",
+    "detail": "test function",
+    "kind": 11,
+    "range": {
+      "start": {
+        "line": 56,
+        "character": 0
+      },
+      "end": {
+        "line": 78,
+        "character": 1
+      }
+    },
+    "children": [
+      {
+        "name": "empty string",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 58,
+            "character": 2
+          },
+          "end": {
+            "line": 61,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "hello world",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 62,
+            "character": 2
+          },
+          "end": {
+            "line": 65,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "unicode",
+        "detail": "test case",
+        "kind": 12,
+        "range": {
+          "start": {
+            "line": 66,
+            "character": 2
+          },
+          "end": {
+            "line": 69,
+            "character": 3
+          }
+        },
+        "children": null
+      }
+    ]
+  }
+]

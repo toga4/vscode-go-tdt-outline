@@ -148,11 +148,50 @@ type TestCase interface {
 
 ## 開発
 
+### テストの実行
+
 ```bash
-# テストの実行
+# すべてのテストを実行
 cd parser
 go test ./...
 
-# カバレッジの確認
+# カバレッジ付きでテストを実行
 go test -cover ./...
+
+# 特定のテストを実行
+go test -run TestParse ./internal/parser
+```
+
+### Golden File Testing
+
+このプロジェクトでは、JSON出力の変更を追跡するためにGolden File Testingを使用しています。
+
+```bash
+# Golden file testを実行（現在の出力と比較）
+cd parser
+go test -run TestGoldenFiles
+
+# Golden fileを更新（出力フォーマットを変更した場合）
+go test -run TestGoldenFiles -update
+
+# 特定のケースのみテスト
+go test -run "TestGoldenFiles/map_test_cases$"
+```
+
+Golden fileは`parser/testdata/golden/`ディレクトリに保存されています。
+
+#### なぜGolden File Testingを使うのか？
+
+1. **JSON出力の可視化**: TypeScriptの拡張機能が期待する正確なJSON形式を確認できます
+2. **変更の追跡**: コードの変更がJSON出力にどう影響するかを明確に把握できます
+3. **後方互換性**: 意図しない出力フォーマットの変更を防ぎます
+
+### 実行例
+
+```bash
+# パーサーの動作確認
+go run ./parser ./parser/internal/parser/testdata/map_test_cases.go | jq '.'
+
+# 出力の一部を確認
+go run ./parser <file.go> | jq '.[0].children | map(.name)'
 ``` 
