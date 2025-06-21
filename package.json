@@ -31,12 +31,12 @@
     "configuration": {
       "title": "Go TDD Outline",
       "properties": {
-        "goTddOutline.timeout": {
+        "go-tdd-outline.timeout": {
           "type": "number",
           "default": 10000,
           "description": "Timeout for parser execution in milliseconds"
         },
-        "goTddOutline.maxFileSize": {
+        "go-tdd-outline.maxFileSize": {
           "type": "number",
           "default": 1048576,
           "description": "Maximum file size to analyze in bytes (default: 1MB)"
