@@ -46,7 +46,7 @@
   },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
-    "compile": "tsc -p ./",
+    "compile": "tsc -p ./ && cp -r src/test/fixtures out/test/",
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm run compile && pnpm run check",
     "lint": "biome lint src",

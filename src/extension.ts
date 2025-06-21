@@ -49,7 +49,7 @@ export async function activate(context: vscode.ExtensionContext) {
   }
 }
 
-class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
+export class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
   private readonly parserPath: string;
   private readonly config: ExtensionConfig;
   private readonly outputChannel: vscode.OutputChannel;
