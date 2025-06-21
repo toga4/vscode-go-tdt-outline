@@ -73,15 +73,6 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 	private readonly config: ExtensionConfig;
 	private readonly outputChannel: vscode.OutputChannel;
 	private parserExists = false;
-	private readonly cache = new Map<
-		string,
-		{
-			symbols: vscode.DocumentSymbol[];
-			version: number;
-			timestamp: number;
-		}
-	>();
-	private readonly CACHE_EXPIRY_MS = 30000; // 30 seconds
 
 	constructor(
 		context: vscode.ExtensionContext,
@@ -154,14 +145,6 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 			return [];
 		}
 
-		// Check cache
-		const cacheKey = `${document.fileName}:${document.version}`;
-		const cached = this.cache.get(cacheKey);
-		if (cached && Date.now() - cached.timestamp < this.CACHE_EXPIRY_MS) {
-			this.log("Using cached result", "info");
-			return cached.symbols;
-		}
-
 		try {
 			this.log(`Analyzing file: ${document.fileName}`, "info");
 
@@ -170,7 +153,6 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 				[document.fileName],
 				{
 					timeout: this.config.timeout,
-					signal: token.isCancellationRequested ? undefined : undefined,
 				},
 			);
 
@@ -185,17 +167,6 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 			}
 
 			const vsCodeSymbols = this.convertToVSCodeSymbols(goSymbols);
-
-			// Update cache
-			this.cache.set(cacheKey, {
-				symbols: vsCodeSymbols,
-				version: document.version,
-				timestamp: Date.now(),
-			});
-
-			// Clean old cache entries
-			this.cleanCache();
-
 			this.log(`Found ${vsCodeSymbols.length} test functions`, "info");
 			return vsCodeSymbols;
 		} catch (error) {
@@ -226,14 +197,6 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 		return [];
 	}
 
-	private cleanCache(): void {
-		const now = Date.now();
-		for (const [key, value] of this.cache.entries()) {
-			if (now - value.timestamp > this.CACHE_EXPIRY_MS) {
-				this.cache.delete(key);
-			}
-		}
-	}
 
 	/**
 	 * Recursively convert JSON objects from Go tool to VSCode DocumentSymbol[]
