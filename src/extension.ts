@@ -2,7 +2,8 @@
 import * as vscode from "vscode";
 import * as cp from "node:child_process";
 import * as path from "node:path";
-import * as fs from "node:fs";
+import * as fs from "node:fs/promises";
+import { promisify } from "node:util";
 
 // Type definition for JSON output from Go analysis tool
 interface GoSymbol {
@@ -16,18 +17,34 @@ interface GoSymbol {
 	children: GoSymbol[];
 }
 
-// Output Channel for logging
-let outputChannel: vscode.OutputChannel;
+// Configuration interface
+interface ExtensionConfig {
+	timeout: number;
+	maxFileSize: number;
+	enableDebugLog: boolean;
+}
 
-export function activate(context: vscode.ExtensionContext) {
+// Error type for child process execution
+interface ExecError extends Error {
+	code?: string;
+	killed?: boolean;
+	signal?: string;
+}
+
+const execFileAsync = promisify(cp.execFile);
+
+export async function activate(context: vscode.ExtensionContext) {
 	// Create Output Channel
-	outputChannel = vscode.window.createOutputChannel("Go TDD Outline");
+	const outputChannel = vscode.window.createOutputChannel("Go TDD Outline");
 	context.subscriptions.push(outputChannel);
 
 	outputChannel.appendLine("Go TDD Outline extension is being activated...");
 
 	try {
-		const goTestOutlineProvider = new GoTestOutlineProvider(context);
+		const goTestOutlineProvider = new GoTestOutlineProvider(
+			context,
+			outputChannel,
+		);
 
 		// Register DocumentSymbolProvider for Go language files
 		const disposable = vscode.languages.registerDocumentSymbolProvider(
@@ -52,12 +69,30 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 class GoTestOutlineProvider implements vscode.DocumentSymbolProvider {
-	private parserPath: string;
+	private readonly parserPath: string;
+	private readonly config: ExtensionConfig;
+	private readonly outputChannel: vscode.OutputChannel;
 	private parserExists = false;
+	private readonly cache = new Map<
+		string,
+		{
+			symbols: vscode.DocumentSymbol[];
+			version: number;
+			timestamp: number;
+		}
+	>();
+	private readonly CACHE_EXPIRY_MS = 30000; // 30 seconds
 
-	constructor(context: vscode.ExtensionContext) {
+	constructor(
+		context: vscode.ExtensionContext,
+		outputChannel: vscode.OutputChannel,
+	) {
+		this.outputChannel = outputChannel;
+
+		// Load configuration
+		this.config = this.loadConfiguration();
+
 		// Get path to bundled Go analysis tool
-		// Change executable filename based on OS
 		const parserFile =
 			process.platform === "win32"
 				? "go-outline-parser.exe"
@@ -69,9 +104,26 @@ class GoTestOutlineProvider implements vscode.DocumentSymbolProvider {
 			parserFile,
 		);
 
-		// Check if parser file exists
-		this.parserExists = fs.existsSync(this.parserPath);
-		if (!this.parserExists) {
+		// Check if parser file exists asynchronously
+		this.checkParserExists();
+	}
+
+	private loadConfiguration(): ExtensionConfig {
+		const config = vscode.workspace.getConfiguration("goTddOutline");
+		return {
+			timeout: config.get<number>("timeout") ?? 10000,
+			maxFileSize: config.get<number>("maxFileSize") ?? 1024 * 1024, // 1MB
+			enableDebugLog: config.get<boolean>("enableDebugLog") ?? false,
+		};
+	}
+
+	private async checkParserExists(): Promise<void> {
+		try {
+			await fs.access(this.parserPath);
+			this.parserExists = true;
+			this.log("Parser found successfully", "info");
+		} catch {
+			this.parserExists = false;
 			vscode.window.showErrorMessage(
 				`Go TDD Outline: Parser file not found. Please reinstall the extension.\nPath: ${this.parserPath}`,
 			);
@@ -84,6 +136,7 @@ class GoTestOutlineProvider implements vscode.DocumentSymbolProvider {
 	): Promise<vscode.DocumentSymbol[]> {
 		// Early return if parser doesn't exist
 		if (!this.parserExists) {
+			this.log("Parser not available", "warn");
 			return [];
 		}
 
@@ -92,71 +145,94 @@ class GoTestOutlineProvider implements vscode.DocumentSymbolProvider {
 			return [];
 		}
 
-		// Execute Go analysis tool
-		return new Promise((resolve, reject) => {
-			// execFile is preferable for security
-			const child = cp.execFile(
+		// Check file size
+		const fileStats = await fs.stat(document.fileName);
+		if (fileStats.size > this.config.maxFileSize) {
+			vscode.window.showWarningMessage(
+				`Go TDD Outline: File too large (${Math.round(fileStats.size / 1024)}KB). Skipping analysis.`,
+			);
+			return [];
+		}
+
+		// Check cache
+		const cacheKey = `${document.fileName}:${document.version}`;
+		const cached = this.cache.get(cacheKey);
+		if (cached && Date.now() - cached.timestamp < this.CACHE_EXPIRY_MS) {
+			this.log("Using cached result", "info");
+			return cached.symbols;
+		}
+
+		try {
+			this.log(`Analyzing file: ${document.fileName}`, "info");
+
+			const { stdout, stderr } = await execFileAsync(
 				this.parserPath,
 				[document.fileName],
-				{ timeout: 10000 }, // 10 second timeout
-				(err, stdout, stderr) => {
-					// Check for cancellation
-					if (token.isCancellationRequested) {
-						return resolve([]);
-					}
-
-					if (err) {
-						// Display appropriate error message based on error type
-						if (err.code === "ETIMEDOUT") {
-							vscode.window.showErrorMessage(
-								"Go TDD Outline: Parser timed out. File may be too large.",
-							);
-						} else if (err.code === "ENOENT") {
-							vscode.window.showErrorMessage(
-								"Go TDD Outline: Parser file not found.",
-							);
-							this.parserExists = false;
-						} else {
-							vscode.window.showErrorMessage(
-								`Go TDD Outline: Error occurred during analysis: ${err.message}`,
-							);
-						}
-						log(`Error executing go-outline-parser: ${err}`, "error");
-						return resolve([]); // Return empty array on error
-					}
-					if (stderr?.trim()) {
-						log(`go-outline-parser stderr: ${stderr}`, "warn");
-					}
-
-					try {
-						// Parse output JSON
-						const goSymbols: GoSymbol[] = JSON.parse(stdout);
-						if (!goSymbols) {
-							return resolve([]);
-						}
-
-						// Convert Go symbol information to VS Code symbol information
-						const vsCodeSymbols = this.convertToVSCodeSymbols(goSymbols);
-						resolve(vsCodeSymbols);
-					} catch (e) {
-						log(`Error parsing JSON from go-outline-parser: ${e}`, "error");
-						log(`Raw output: ${stdout}`, "error");
-						// Notify user of JSON parse error
-						vscode.window.showErrorMessage(
-							"Go TDD Outline: Failed to parse parser output. Please check Go file syntax.",
-						);
-						return resolve([]); // Return empty array on error
-					}
+				{
+					timeout: this.config.timeout,
+					signal: token.isCancellationRequested ? undefined : undefined,
 				},
 			);
 
-			// Terminate process on cancellation
-			token.onCancellationRequested(() => {
-				if (!child?.killed) {
-					child.kill();
-				}
+			if (stderr?.trim()) {
+				this.log(`Parser stderr: ${stderr}`, "warn");
+			}
+
+			const goSymbols: GoSymbol[] = JSON.parse(stdout);
+			if (!goSymbols || !Array.isArray(goSymbols)) {
+				this.log("No symbols found or invalid response format", "info");
+				return [];
+			}
+
+			const vsCodeSymbols = this.convertToVSCodeSymbols(goSymbols);
+
+			// Update cache
+			this.cache.set(cacheKey, {
+				symbols: vsCodeSymbols,
+				version: document.version,
+				timestamp: Date.now(),
 			});
-		});
+
+			// Clean old cache entries
+			this.cleanCache();
+
+			this.log(`Found ${vsCodeSymbols.length} test functions`, "info");
+			return vsCodeSymbols;
+		} catch (error) {
+			return this.handleError(error as ExecError);
+		}
+	}
+
+	private handleError(error: ExecError): vscode.DocumentSymbol[] {
+		if (error.code === "ETIMEDOUT") {
+			vscode.window.showErrorMessage(
+				"Go TDD Outline: Parser timed out. File may be too large.",
+			);
+		} else if (error.code === "ENOENT") {
+			vscode.window.showErrorMessage("Go TDD Outline: Parser file not found.");
+			this.parserExists = false;
+		} else if (error.name === "SyntaxError") {
+			vscode.window.showErrorMessage(
+				"Go TDD Outline: Failed to parse parser output. Please check Go file syntax.",
+			);
+			this.log(`JSON parse error: ${error.message}`, "error");
+		} else {
+			vscode.window.showErrorMessage(
+				`Go TDD Outline: Error occurred during analysis: ${error.message}`,
+			);
+		}
+
+		this.log(`Error executing parser: ${error}`, "error");
+		return [];
+	}
+
+	private cleanCache(): void {
+		const now = Date.now();
+		for (const [key, value] of this.cache.entries()) {
+			if (now - value.timestamp > this.CACHE_EXPIRY_MS) {
+				this.cache.delete(key);
+			}
+		}
 	}
 
 	/**
@@ -186,32 +262,36 @@ class GoTestOutlineProvider implements vscode.DocumentSymbolProvider {
 			return symbol;
 		});
 	}
-}
 
-// Helper function for log output
-function log(message: string, level: "info" | "error" | "warn" = "info") {
-	const timestamp = new Date().toISOString();
-	const logMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+	private log(
+		message: string,
+		level: "info" | "error" | "warn" = "info",
+	): void {
+		if (!this.config.enableDebugLog && level === "info") {
+			return;
+		}
 
-	if (outputChannel) {
-		outputChannel.appendLine(logMessage);
-	}
+		const timestamp = new Date().toISOString();
+		const logMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
 
-	switch (level) {
-		case "error":
-			console.error(logMessage);
-			break;
-		case "warn":
-			console.warn(logMessage);
-			break;
-		default:
-			console.log(logMessage);
+		this.outputChannel.appendLine(logMessage);
+
+		switch (level) {
+			case "error":
+				console.error(logMessage);
+				break;
+			case "warn":
+				console.warn(logMessage);
+				break;
+			default:
+				if (this.config.enableDebugLog) {
+					console.log(logMessage);
+				}
+		}
 	}
 }
 
 export function deactivate() {
-	if (outputChannel) {
-		outputChannel.appendLine("Go TDD Outline extension is being deactivated.");
-		outputChannel.dispose();
-	}
+	// Extension cleanup is handled automatically by VSCode
+	// OutputChannel disposal is managed by context.subscriptions
 }

@@ -3,6 +3,19 @@
   "displayName": "Go Table Driven Test Outline",
   "description": "Display table driven test cases in Outline view.",
   "version": "0.0.1",
+  "publisher": "toga4",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/toga4/vscode-go-tdt-outline"
+  },
+  "keywords": [
+    "go",
+    "golang",
+    "test",
+    "table-driven",
+    "outline",
+    "symbol"
+  ],
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -14,7 +27,28 @@
     "onLanguage:go"
   ],
   "main": "./out/extension.js",
-  "contributes": {},
+  "contributes": {
+    "configuration": {
+      "title": "Go TDD Outline",
+      "properties": {
+        "goTddOutline.timeout": {
+          "type": "number",
+          "default": 10000,
+          "description": "Timeout for parser execution in milliseconds"
+        },
+        "goTddOutline.maxFileSize": {
+          "type": "number",
+          "default": 1048576,
+          "description": "Maximum file size to analyze in bytes (default: 1MB)"
+        },
+        "goTddOutline.enableDebugLog": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable debug logging to Output Channel"
+        }
+      }
+    }
+  },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
