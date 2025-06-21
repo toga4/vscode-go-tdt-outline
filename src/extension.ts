@@ -21,7 +21,6 @@ interface GoSymbol {
 interface ExtensionConfig {
 	timeout: number;
 	maxFileSize: number;
-	enableDebugLog: boolean;
 }
 
 // Error type for child process execution
@@ -100,11 +99,10 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 	}
 
 	private loadConfiguration(): ExtensionConfig {
-		const config = vscode.workspace.getConfiguration("goTddOutline");
+		const config = vscode.workspace.getConfiguration("go-tdd-outline");
 		return {
 			timeout: config.get<number>("timeout") ?? 10000,
 			maxFileSize: config.get<number>("maxFileSize") ?? 1024 * 1024, // 1MB
-			enableDebugLog: config.get<boolean>("enableDebugLog") ?? false,
 		};
 	}
 
@@ -112,7 +110,6 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 		try {
 			await fs.access(this.parserPath);
 			this.parserExists = true;
-			this.log("Parser found successfully", "info");
 		} catch {
 			this.parserExists = false;
 			vscode.window.showErrorMessage(
@@ -127,7 +124,6 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 	): Promise<vscode.DocumentSymbol[]> {
 		// Early return if parser doesn't exist
 		if (!this.parserExists) {
-			this.log("Parser not available", "warn");
 			return [];
 		}
 
@@ -146,8 +142,6 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 		}
 
 		try {
-			this.log(`Analyzing file: ${document.fileName}`, "info");
-
 			const { stdout, stderr } = await execFileAsync(
 				this.parserPath,
 				[document.fileName],
@@ -157,17 +151,15 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 			);
 
 			if (stderr?.trim()) {
-				this.log(`Parser stderr: ${stderr}`, "warn");
+				this.outputChannel.appendLine(`Parser stderr: ${stderr}`);
 			}
 
 			const goSymbols: GoSymbol[] = JSON.parse(stdout);
 			if (!goSymbols || !Array.isArray(goSymbols)) {
-				this.log("No symbols found or invalid response format", "info");
 				return [];
 			}
 
 			const vsCodeSymbols = this.convertToVSCodeSymbols(goSymbols);
-			this.log(`Found ${vsCodeSymbols.length} test functions`, "info");
 			return vsCodeSymbols;
 		} catch (error) {
 			return this.handleError(error as ExecError);
@@ -186,17 +178,15 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 			vscode.window.showErrorMessage(
 				"Go TDD Outline: Failed to parse parser output. Please check Go file syntax.",
 			);
-			this.log(`JSON parse error: ${error.message}`, "error");
 		} else {
 			vscode.window.showErrorMessage(
 				`Go TDD Outline: Error occurred during analysis: ${error.message}`,
 			);
 		}
 
-		this.log(`Error executing parser: ${error}`, "error");
+		this.outputChannel.appendLine(`Error: ${error}`);
 		return [];
 	}
-
 
 	/**
 	 * Recursively convert JSON objects from Go tool to VSCode DocumentSymbol[]
@@ -226,32 +216,6 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 		});
 	}
 
-	private log(
-		message: string,
-		level: "info" | "error" | "warn" = "info",
-	): void {
-		if (!this.config.enableDebugLog && level === "info") {
-			return;
-		}
-
-		const timestamp = new Date().toISOString();
-		const logMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
-
-		this.outputChannel.appendLine(logMessage);
-
-		switch (level) {
-			case "error":
-				console.error(logMessage);
-				break;
-			case "warn":
-				console.warn(logMessage);
-				break;
-			default:
-				if (this.config.enableDebugLog) {
-					console.log(logMessage);
-				}
-		}
-	}
 }
 
 export function deactivate() {

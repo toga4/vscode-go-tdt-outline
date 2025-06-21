@@ -40,11 +40,6 @@
           "type": "number",
           "default": 1048576,
           "description": "Maximum file size to analyze in bytes (default: 1MB)"
-        },
-        "goTddOutline.enableDebugLog": {
-          "type": "boolean",
-          "default": false,
-          "description": "Enable debug logging to Output Channel"
         }
       }
     }
