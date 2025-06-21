@@ -17,3 +17,5 @@ func BenchmarkExample(b *testing.B) {
 		{name: "should be ignored"},
 	}
 }
+
+func TestNonTestFunction(t *testing.T)

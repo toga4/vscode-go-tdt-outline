@@ -79,6 +79,11 @@ func extractTestFunction(n ast.Node, fset *token.FileSet) *Symbol {
 		return nil
 	}
 
+	// Skip external (non-Go) function
+	if funcDecl.Body == nil {
+		return nil
+	}
+
 	// Extract test cases from the function body
 	testCases := extractTestCases(funcDecl.Body, fset)
 	if len(testCases) == 0 {
