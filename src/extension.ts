@@ -2,7 +2,7 @@
 import * as vscode from "vscode";
 import * as cp from "node:child_process";
 import * as path from "node:path";
-import * as fs from "node:fs/promises";
+import * as fs from "node:fs";
 import { promisify } from "node:util";
 
 // Type definition for JSON output from Go analysis tool
@@ -94,8 +94,13 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 			parserFile,
 		);
 
-		// Check if parser file exists asynchronously
-		this.checkParserExists();
+		// Check if parser file exists
+		this.parserExists = fs.existsSync(this.parserPath);
+		if (!this.parserExists) {
+			vscode.window.showErrorMessage(
+				`Go TDD Outline: Parser file not found. Please reinstall the extension.\nPath: ${this.parserPath}`,
+			);
+		}
 	}
 
 	private loadConfiguration(): ExtensionConfig {
@@ -104,18 +109,6 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 			timeout: config.get<number>("timeout") ?? 10000,
 			maxFileSize: config.get<number>("maxFileSize") ?? 1024 * 1024, // 1MB
 		};
-	}
-
-	private async checkParserExists(): Promise<void> {
-		try {
-			await fs.access(this.parserPath);
-			this.parserExists = true;
-		} catch {
-			this.parserExists = false;
-			vscode.window.showErrorMessage(
-				`Go TDD Outline: Parser file not found. Please reinstall the extension.\nPath: ${this.parserPath}`,
-			);
-		}
 	}
 
 	async provideDocumentSymbols(
@@ -133,7 +126,7 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 		}
 
 		// Check file size
-		const fileStats = await fs.stat(document.fileName);
+		const fileStats = fs.statSync(document.fileName);
 		if (fileStats.size > this.config.maxFileSize) {
 			vscode.window.showWarningMessage(
 				`Go TDD Outline: File too large (${Math.round(fileStats.size / 1024)}KB). Skipping analysis.`,
