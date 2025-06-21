@@ -41,7 +41,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	outputChannel.appendLine("Go TDD Outline extension is being activated...");
 
 	try {
-		const goTestOutlineProvider = new GoTestOutlineProvider(
+		const goTddOutlineProvider = new GoTddOutlineProvider(
 			context,
 			outputChannel,
 		);
@@ -49,7 +49,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Register DocumentSymbolProvider for Go language files
 		const disposable = vscode.languages.registerDocumentSymbolProvider(
 			{ language: "go", scheme: "file" },
-			goTestOutlineProvider,
+			goTddOutlineProvider,
 		);
 		context.subscriptions.push(disposable);
 
@@ -68,7 +68,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 }
 
-class GoTestOutlineProvider implements vscode.DocumentSymbolProvider {
+class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 	private readonly parserPath: string;
 	private readonly config: ExtensionConfig;
 	private readonly outputChannel: vscode.OutputChannel;
