@@ -23,13 +23,6 @@ interface ExtensionConfig {
 	maxFileSize: number;
 }
 
-// Error type for child process execution
-interface ExecError extends Error {
-	code?: string;
-	killed?: boolean;
-	signal?: string;
-}
-
 const execFileAsync = promisify(cp.execFile);
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -59,9 +52,6 @@ export async function activate(context: vscode.ExtensionContext) {
 		const errorMessage = error instanceof Error ? error.message : String(error);
 		outputChannel.appendLine(
 			`Failed to activate Go TDD Outline: ${errorMessage}`,
-		);
-		vscode.window.showErrorMessage(
-			`Go TDD Outline: Failed to activate extension: ${errorMessage}`,
 		);
 		throw error;
 	}
@@ -97,8 +87,8 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 		// Check if parser file exists
 		this.parserExists = fs.existsSync(this.parserPath);
 		if (!this.parserExists) {
-			vscode.window.showErrorMessage(
-				`Go TDD Outline: Parser file not found. Please reinstall the extension.\nPath: ${this.parserPath}`,
+			this.outputChannel.appendLine(
+				`Error: Parser file not found. Please reinstall the extension. Path: ${this.parserPath}`,
 			);
 		}
 	}
@@ -128,8 +118,8 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 		// Check file size
 		const fileStats = fs.statSync(document.fileName);
 		if (fileStats.size > this.config.maxFileSize) {
-			vscode.window.showWarningMessage(
-				`Go TDD Outline: File too large (${Math.round(fileStats.size / 1024)}KB). Skipping analysis.`,
+			this.outputChannel.appendLine(
+				`Warning: File too large (${Math.round(fileStats.size / 1024)}KB). Skipping analysis.`,
 			);
 			return [];
 		}
@@ -155,30 +145,9 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 			const vsCodeSymbols = this.convertToVSCodeSymbols(goSymbols);
 			return vsCodeSymbols;
 		} catch (error) {
-			return this.handleError(error as ExecError);
+			this.outputChannel.appendLine(`Error: ${error}`);
+			return [];
 		}
-	}
-
-	private handleError(error: ExecError): vscode.DocumentSymbol[] {
-		if (error.code === "ETIMEDOUT") {
-			vscode.window.showErrorMessage(
-				"Go TDD Outline: Parser timed out. File may be too large.",
-			);
-		} else if (error.code === "ENOENT") {
-			vscode.window.showErrorMessage("Go TDD Outline: Parser file not found.");
-			this.parserExists = false;
-		} else if (error.name === "SyntaxError") {
-			vscode.window.showErrorMessage(
-				"Go TDD Outline: Failed to parse parser output. Please check Go file syntax.",
-			);
-		} else {
-			vscode.window.showErrorMessage(
-				`Go TDD Outline: Error occurred during analysis: ${error.message}`,
-			);
-		}
-
-		this.outputChannel.appendLine(`Error: ${error}`);
-		return [];
 	}
 
 	/**
@@ -208,7 +177,6 @@ class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
 			return symbol;
 		});
 	}
-
 }
 
 export function deactivate() {
