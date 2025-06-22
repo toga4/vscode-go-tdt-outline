@@ -47,7 +47,7 @@
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
     "build-parser": "go build -o ./out/parser ./parser/main.go",
-    "compile": "tsc -p ./ && cp -r src/test/fixtures out/test/",
+    "compile": "tsc -p ./ && cp -r src/test/testdata out/test/",
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm run build-parser && pnpm run compile && pnpm run check",
     "lint": "biome lint src",
