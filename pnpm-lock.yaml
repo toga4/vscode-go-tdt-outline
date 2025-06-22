@@ -11,6 +11,9 @@ importers:
       '@biomejs/biome':
         specifier: ^2.0.4
         version: 2.0.4
+      '@types/diff-match-patch':
+        specifier: ^1.0.36
+        version: 1.0.36
       '@types/mocha':
         specifier: ^10.0.10
         version: 10.0.10
@@ -29,6 +32,12 @@ importers:
       '@vscode/vsce':
         specifier: ^3.5.0
         version: 3.5.0
+      diff-match-patch:
+        specifier: ^1.0.5
+        version: 1.0.5
+      picocolors:
+        specifier: ^1.1.1
+        version: 1.1.1
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -246,6 +255,9 @@ packages:
 
   '@textlint/types@14.8.0':
     resolution: {integrity: sha512-Lsq2gxh2pmCKV6KN4fL70DMNNGuZlPuDQ0RHLU59/wgUs5krzrpHWCRYHK4M4J45U1PfZzQnWvLIfFETlR9GPA==}
+
+  '@types/diff-match-patch@1.0.36':
+    resolution: {integrity: sha512-xFdR6tkm0MWvBfO8xXCSsinYxHcqkQUlcHeSpMC2ukzOb6lwQAfDmW+Qt0AvlGd8HpsS28qKsB+oPeJn9I39jg==}
 
   '@types/istanbul-lib-coverage@2.0.6':
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
@@ -580,6 +592,9 @@ packages:
   detect-libc@2.0.4:
     resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
     engines: {node: '>=8'}
+
+  diff-match-patch@1.0.5:
+    resolution: {integrity: sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==}
 
   diff@5.2.0:
     resolution: {integrity: sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==}
@@ -1920,6 +1935,8 @@ snapshots:
     dependencies:
       '@textlint/ast-node-types': 14.8.0
 
+  '@types/diff-match-patch@1.0.36': {}
+
   '@types/istanbul-lib-coverage@2.0.6': {}
 
   '@types/mocha@10.0.10': {}
@@ -2302,6 +2319,8 @@ snapshots:
 
   detect-libc@2.0.4:
     optional: true
+
+  diff-match-patch@1.0.5: {}
 
   diff@5.2.0: {}
 
