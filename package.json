@@ -48,7 +48,7 @@
     "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
+    "pretest": "pnpm run compile && pnpm run check",
     "lint": "biome lint src",
     "lint:fix": "biome lint --write src",
     "format": "biome format --write .",
