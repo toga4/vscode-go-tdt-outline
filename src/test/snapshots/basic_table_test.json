@@ -3,77 +3,77 @@
     "name": "TestExample",
     "detail": "test function",
     "kind": 11,
-    "range": {
-      "start": {
+    "range": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 26,
         "character": 1
       }
-    },
-    "selectionRange": {
-      "start": {
+    ],
+    "selectionRange": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 26,
         "character": 1
       }
-    },
+    ],
     "children": [
       {
         "name": "normal case",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 10,
             "character": 2
           },
-          "end": {
+          {
             "line": 14,
             "character": 3
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 10,
             "character": 2
           },
-          "end": {
+          {
             "line": 14,
             "character": 3
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "zero value",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 15,
             "character": 2
           },
-          "end": {
+          {
             "line": 19,
             "character": 3
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 15,
             "character": 2
           },
-          "end": {
+          {
             "line": 19,
             "character": 3
           }
-        },
+        ],
         "children": []
       }
     ]

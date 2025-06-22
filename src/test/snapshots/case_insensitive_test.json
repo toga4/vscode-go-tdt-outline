@@ -3,103 +3,103 @@
     "name": "TestCaseInsensitive",
     "detail": "test function",
     "kind": 11,
-    "range": {
-      "start": {
+    "range": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 14,
         "character": 1
       }
-    },
-    "selectionRange": {
-      "start": {
+    ],
+    "selectionRange": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 14,
         "character": 1
       }
-    },
+    ],
     "children": [
       {
         "name": "uppercase NAME",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 10,
             "character": 2
           },
-          "end": {
+          {
             "line": 10,
             "character": 26
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 10,
             "character": 2
           },
-          "end": {
+          {
             "line": 10,
             "character": 26
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "mixed case Name",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 11,
             "character": 2
           },
-          "end": {
+          {
             "line": 11,
             "character": 27
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 11,
             "character": 2
           },
-          "end": {
+          {
             "line": 11,
             "character": 27
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "lowercase name",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 12,
             "character": 2
           },
-          "end": {
+          {
             "line": 12,
             "character": 26
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 12,
             "character": 2
           },
-          "end": {
+          {
             "line": 12,
             "character": 26
           }
-        },
+        ],
         "children": []
       }
     ]

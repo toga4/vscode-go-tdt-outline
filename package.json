@@ -56,18 +56,21 @@
     "check": "biome check .",
     "check:fix": "biome check --write .",
     "test": "vscode-test",
-    "test:update-snapshots": "UPDATE_SNAPSHOTS=true vscode-test",
+    "test:update-snapshots": "UPDATE_SNAPSHOTS=true pnpm run test",
     "package": "vsce package",
     "clean": "rm -rf out"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.4",
+    "@types/diff-match-patch": "^1.0.36",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
     "@types/vscode": "^1.90.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.5.0",
+    "diff-match-patch": "^1.0.5",
+    "picocolors": "^1.1.1",
     "typescript": "^5.8.3"
   }
 }

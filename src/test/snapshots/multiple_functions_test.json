@@ -3,77 +3,77 @@
     "name": "TestFirst",
     "detail": "test function",
     "kind": 11,
-    "range": {
-      "start": {
+    "range": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 14,
         "character": 1
       }
-    },
-    "selectionRange": {
-      "start": {
+    ],
+    "selectionRange": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 14,
         "character": 1
       }
-    },
+    ],
     "children": [
       {
         "name": "test1",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 8,
             "character": 2
           },
-          "end": {
+          {
             "line": 8,
             "character": 17
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 8,
             "character": 2
           },
-          "end": {
+          {
             "line": 8,
             "character": 17
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "test2",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 9,
             "character": 2
           },
-          "end": {
+          {
             "line": 9,
             "character": 17
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 9,
             "character": 2
           },
-          "end": {
+          {
             "line": 9,
             "character": 17
           }
-        },
+        ],
         "children": []
       }
     ]
@@ -82,77 +82,77 @@
     "name": "TestSecond",
     "detail": "test function",
     "kind": 11,
-    "range": {
-      "start": {
+    "range": [
+      {
         "line": 16,
         "character": 0
       },
-      "end": {
+      {
         "line": 26,
         "character": 1
       }
-    },
-    "selectionRange": {
-      "start": {
+    ],
+    "selectionRange": [
+      {
         "line": 16,
         "character": 0
       },
-      "end": {
+      {
         "line": 26,
         "character": 1
       }
-    },
+    ],
     "children": [
       {
         "name": "test3",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 20,
             "character": 2
           },
-          "end": {
+          {
             "line": 20,
             "character": 17
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 20,
             "character": 2
           },
-          "end": {
+          {
             "line": 20,
             "character": 17
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "test4",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 21,
             "character": 2
           },
-          "end": {
+          {
             "line": 21,
             "character": 17
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 21,
             "character": 2
           },
-          "end": {
+          {
             "line": 21,
             "character": 17
           }
-        },
+        ],
         "children": []
       }
     ]

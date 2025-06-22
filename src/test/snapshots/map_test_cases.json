@@ -3,103 +3,103 @@
     "name": "TestWithMap",
     "detail": "test function",
     "kind": 11,
-    "range": {
-      "start": {
+    "range": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 32,
         "character": 1
       }
-    },
-    "selectionRange": {
-      "start": {
+    ],
+    "selectionRange": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 32,
         "character": 1
       }
-    },
+    ],
     "children": [
       {
         "name": "normal case: basic scenario",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 10,
             "character": 2
           },
-          "end": {
+          {
             "line": 14,
             "character": 3
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 10,
             "character": 2
           },
-          "end": {
+          {
             "line": 14,
             "character": 3
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "normal case: zero value",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 15,
             "character": 2
           },
-          "end": {
+          {
             "line": 19,
             "character": 3
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 15,
             "character": 2
           },
-          "end": {
+          {
             "line": 19,
             "character": 3
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "error case: negative value",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 20,
             "character": 2
           },
-          "end": {
+          {
             "line": 24,
             "character": 3
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 20,
             "character": 2
           },
-          "end": {
+          {
             "line": 24,
             "character": 3
           }
-        },
+        ],
         "children": []
       }
     ]
@@ -108,103 +108,103 @@
     "name": "TestSimpleMap",
     "detail": "test function",
     "kind": 11,
-    "range": {
-      "start": {
+    "range": [
+      {
         "line": 35,
         "character": 0
       },
-      "end": {
+      {
         "line": 48,
         "character": 1
       }
-    },
-    "selectionRange": {
-      "start": {
+    ],
+    "selectionRange": [
+      {
         "line": 35,
         "character": 0
       },
-      "end": {
+      {
         "line": 48,
         "character": 1
       }
-    },
+    ],
     "children": [
       {
         "name": "one",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 37,
             "character": 2
           },
-          "end": {
+          {
             "line": 37,
             "character": 12
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 37,
             "character": 2
           },
-          "end": {
+          {
             "line": 37,
             "character": 12
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "two",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 38,
             "character": 2
           },
-          "end": {
+          {
             "line": 38,
             "character": 12
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 38,
             "character": 2
           },
-          "end": {
+          {
             "line": 38,
             "character": 12
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "three",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 39,
             "character": 2
           },
-          "end": {
+          {
             "line": 39,
             "character": 12
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 39,
             "character": 2
           },
-          "end": {
+          {
             "line": 39,
             "character": 12
           }
-        },
+        ],
         "children": []
       }
     ]
@@ -213,103 +213,103 @@
     "name": "TestTypedMap",
     "detail": "test function",
     "kind": 11,
-    "range": {
-      "start": {
+    "range": [
+      {
         "line": 56,
         "character": 0
       },
-      "end": {
+      {
         "line": 78,
         "character": 1
       }
-    },
-    "selectionRange": {
-      "start": {
+    ],
+    "selectionRange": [
+      {
         "line": 56,
         "character": 0
       },
-      "end": {
+      {
         "line": 78,
         "character": 1
       }
-    },
+    ],
     "children": [
       {
         "name": "empty string",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 58,
             "character": 2
           },
-          "end": {
+          {
             "line": 61,
             "character": 3
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 58,
             "character": 2
           },
-          "end": {
+          {
             "line": 61,
             "character": 3
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "hello world",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 62,
             "character": 2
           },
-          "end": {
+          {
             "line": 65,
             "character": 3
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 62,
             "character": 2
           },
-          "end": {
+          {
             "line": 65,
             "character": 3
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "unicode",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 66,
             "character": 2
           },
-          "end": {
+          {
             "line": 69,
             "character": 3
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 66,
             "character": 2
           },
-          "end": {
+          {
             "line": 69,
             "character": 3
           }
-        },
+        ],
         "children": []
       }
     ]

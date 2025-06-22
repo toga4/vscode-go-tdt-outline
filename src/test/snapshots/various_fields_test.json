@@ -3,129 +3,129 @@
     "name": "TestVariousFields",
     "detail": "test function",
     "kind": 11,
-    "range": {
-      "start": {
+    "range": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 16,
         "character": 1
       }
-    },
-    "selectionRange": {
-      "start": {
+    ],
+    "selectionRange": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 16,
         "character": 1
       }
-    },
+    ],
     "children": [
       {
         "name": "description field",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 11,
             "character": 2
           },
-          "end": {
+          {
             "line": 11,
             "character": 36
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 11,
             "character": 2
           },
-          "end": {
+          {
             "line": 11,
             "character": 36
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "title field",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 12,
             "character": 2
           },
-          "end": {
+          {
             "line": 12,
             "character": 24
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 12,
             "character": 2
           },
-          "end": {
+          {
             "line": 12,
             "character": 24
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "scenario field",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 13,
             "character": 2
           },
-          "end": {
+          {
             "line": 13,
             "character": 30
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 13,
             "character": 2
           },
-          "end": {
+          {
             "line": 13,
             "character": 30
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "testName field",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 14,
             "character": 2
           },
-          "end": {
+          {
             "line": 14,
             "character": 30
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 14,
             "character": 2
           },
-          "end": {
+          {
             "line": 14,
             "character": 30
           }
-        },
+        ],
         "children": []
       }
     ]

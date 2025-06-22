@@ -3,129 +3,129 @@
     "name": "TestMultipleTables",
     "detail": "test function",
     "kind": 11,
-    "range": {
-      "start": {
+    "range": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 20,
         "character": 1
       }
-    },
-    "selectionRange": {
-      "start": {
+    ],
+    "selectionRange": [
+      {
         "line": 4,
         "character": 0
       },
-      "end": {
+      {
         "line": 20,
         "character": 1
       }
-    },
+    ],
     "children": [
       {
         "name": "table1-test1",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 9,
             "character": 2
           },
-          "end": {
+          {
             "line": 9,
             "character": 24
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 9,
             "character": 2
           },
-          "end": {
+          {
             "line": 9,
             "character": 24
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "table1-test2",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 10,
             "character": 2
           },
-          "end": {
+          {
             "line": 10,
             "character": 24
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 10,
             "character": 2
           },
-          "end": {
+          {
             "line": 10,
             "character": 24
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "table2-test1",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 17,
             "character": 2
           },
-          "end": {
+          {
             "line": 17,
             "character": 24
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 17,
             "character": 2
           },
-          "end": {
+          {
             "line": 17,
             "character": 24
           }
-        },
+        ],
         "children": []
       },
       {
         "name": "table2-test2",
         "detail": "test case",
         "kind": 22,
-        "range": {
-          "start": {
+        "range": [
+          {
             "line": 18,
             "character": 2
           },
-          "end": {
+          {
             "line": 18,
             "character": 24
           }
-        },
-        "selectionRange": {
-          "start": {
+        ],
+        "selectionRange": [
+          {
             "line": 18,
             "character": 2
           },
-          "end": {
+          {
             "line": 18,
             "character": 24
           }
-        },
+        ],
         "children": []
       }
     ]
