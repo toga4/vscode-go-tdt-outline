@@ -7,9 +7,7 @@ import type * as vscode from "vscode";
  * srcディレクトリ以下のsnapshotsディレクトリに保存
  */
 export function getSnapshotPath(testName: string): string {
-  // __dirnameは out/test を指すので、src/test に変換する
-  const srcTestDir = __dirname.replace(/^(.*)\/out\/test/, "$1/src/test");
-  const snapshotsDir = path.join(srcTestDir, "snapshots");
+  const snapshotsDir = path.resolve("src/test/snapshots");
   if (!fs.existsSync(snapshotsDir)) {
     fs.mkdirSync(snapshotsDir, { recursive: true });
   }
