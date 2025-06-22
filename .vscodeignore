@@ -1,8 +1,13 @@
 .vscode/**
 .vscode-test/**
+out/test/**
 src/**
+parser/**
 .gitignore
 .yarnrc
+biome.jsonc
+go.*
+pnpm-lock.yaml
 vsc-extension-quickstart.md
 **/tsconfig.json
 **/eslint.config.mjs
