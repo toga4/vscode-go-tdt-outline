@@ -2,14 +2,13 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as vscode from "vscode";
 import { GoTddOutlineProvider } from "../extension";
-import { expectMatchSnapshot, shouldUpdateSnapshots } from "./snapshot-helper";
+import { expectMatchSnapshot } from "./snapshot-helper";
 
 suite("Snapshot Tests", () => {
   let provider: GoTddOutlineProvider;
   let extensionContext: Partial<vscode.ExtensionContext>;
   let outputChannel: vscode.OutputChannel;
   const fixturesDir = path.join(__dirname, "fixtures");
-  const updateSnapshots = shouldUpdateSnapshots();
 
   suiteSetup(() => {
     // 実際のExtensionContextを模擬
@@ -47,7 +46,7 @@ suite("Snapshot Tests", () => {
 
     const symbols = await provider.provideDocumentSymbols(document, token);
 
-    expectMatchSnapshot("basic_table_test", symbols, updateSnapshots);
+    expectMatchSnapshot("basic_table_test", symbols);
   });
 
   test("multiple_functions_test.go - full structure snapshot", async () => {
@@ -58,7 +57,7 @@ suite("Snapshot Tests", () => {
 
     const symbols = await provider.provideDocumentSymbols(document, token);
 
-    expectMatchSnapshot("multiple_functions_test", symbols, updateSnapshots);
+    expectMatchSnapshot("multiple_functions_test", symbols);
   });
 
   test("case_insensitive_test.go - full structure snapshot", async () => {
@@ -69,7 +68,7 @@ suite("Snapshot Tests", () => {
 
     const symbols = await provider.provideDocumentSymbols(document, token);
 
-    expectMatchSnapshot("case_insensitive_test", symbols, updateSnapshots);
+    expectMatchSnapshot("case_insensitive_test", symbols);
   });
 
   test("various_fields_test.go - full structure snapshot", async () => {
@@ -85,7 +84,7 @@ suite("Snapshot Tests", () => {
 
     const symbols = await provider.provideDocumentSymbols(document, token);
 
-    expectMatchSnapshot("various_fields_test", symbols, updateSnapshots);
+    expectMatchSnapshot("various_fields_test", symbols);
   });
 
   test("typed_test_cases.go - full structure snapshot", async () => {
@@ -101,7 +100,7 @@ suite("Snapshot Tests", () => {
 
     const symbols = await provider.provideDocumentSymbols(document, token);
 
-    expectMatchSnapshot("typed_test_cases", symbols, updateSnapshots);
+    expectMatchSnapshot("typed_test_cases", symbols);
   });
 
   test("map_test_cases.go - full structure snapshot", async () => {
@@ -117,7 +116,7 @@ suite("Snapshot Tests", () => {
 
     const symbols = await provider.provideDocumentSymbols(document, token);
 
-    expectMatchSnapshot("map_test_cases", symbols, updateSnapshots);
+    expectMatchSnapshot("map_test_cases", symbols);
   });
 
   test("backtick_strings_test.go - full structure snapshot", async () => {
@@ -133,7 +132,7 @@ suite("Snapshot Tests", () => {
 
     const symbols = await provider.provideDocumentSymbols(document, token);
 
-    expectMatchSnapshot("backtick_strings_test", symbols, updateSnapshots);
+    expectMatchSnapshot("backtick_strings_test", symbols);
   });
 
   test("multiple_tables_test.go - full structure snapshot", async () => {
@@ -149,7 +148,7 @@ suite("Snapshot Tests", () => {
 
     const symbols = await provider.provideDocumentSymbols(document, token);
 
-    expectMatchSnapshot("multiple_tables_test", symbols, updateSnapshots);
+    expectMatchSnapshot("multiple_tables_test", symbols);
   });
 
   test("no_name_field_test.go - full structure snapshot", async () => {
@@ -165,7 +164,7 @@ suite("Snapshot Tests", () => {
 
     const symbols = await provider.provideDocumentSymbols(document, token);
 
-    expectMatchSnapshot("no_name_field_test", symbols, updateSnapshots);
+    expectMatchSnapshot("no_name_field_test", symbols);
   });
 
   test("non_test_functions.go - full structure snapshot", async () => {
@@ -181,6 +180,6 @@ suite("Snapshot Tests", () => {
 
     const symbols = await provider.provideDocumentSymbols(document, token);
 
-    expectMatchSnapshot("non_test_functions", symbols, updateSnapshots);
+    expectMatchSnapshot("non_test_functions", symbols);
   });
 });
