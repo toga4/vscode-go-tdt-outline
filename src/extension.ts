@@ -24,7 +24,13 @@ interface ExtensionConfig {
 
 const execFileAsync = promisify(cp.execFile);
 
-export async function activate(context: vscode.ExtensionContext) {
+export interface ExtensionApi {
+  documentSymbolProvider: GoTddOutlineProvider;
+}
+
+export async function activate(context: vscode.ExtensionContext): Promise<ExtensionApi> {
+  console.log("activate", context);
+
   // Create Output Channel
   const outputChannel = vscode.window.createOutputChannel("Go TDD Outline");
   context.subscriptions.push(outputChannel);
@@ -42,6 +48,10 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disposable);
 
     outputChannel.appendLine("Go TDD Outline extension activated successfully.");
+
+    return {
+      documentSymbolProvider: goTddOutlineProvider,
+    };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     outputChannel.appendLine(`Failed to activate Go TDD Outline: ${errorMessage}`);
