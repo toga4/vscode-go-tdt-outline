@@ -1,9 +1,9 @@
-# Go Table Driven Test Outline
+# Go TDT Outline
 
 Display Go table-driven test cases in VSCode's Outline view for better test navigation and organization.
 ## Features
 
-Go Table Driven Test Outline enhances your Go testing experience by:
+Go TDT Outline enhances your Go testing experience by:
 
 - **Automatic Test Case Detection**: Recognizes table-driven test patterns in your Go test files
 - **Outline View Integration**: Displays individual test cases as navigable symbols in VSCode's Outline view
@@ -61,7 +61,7 @@ The extension displays it in the Outline view as:
 
 1. Open VSCode
 2. Go to Extensions (Ctrl+Shift+X / Cmd+Shift+X)
-3. Search for "Go Table Driven Test Outline"
+3. Search for "Go TDT Outline"
 4. Click Install
 
 ### From VSIX file
@@ -82,8 +82,8 @@ The extension activates automatically when you open a Go file. Test cases will a
 
 This extension contributes the following settings:
 
-* `go-tdd-outline.timeout`: Timeout for parser execution in milliseconds (default: 10000)
-* `go-tdd-outline.maxFileSize`: Maximum file size to analyze in bytes (default: 1048576 / 1MB)
+* `go-tdt-outline.timeout`: Timeout for parser execution in milliseconds (default: 10000)
+* `go-tdt-outline.maxFileSize`: Maximum file size to analyze in bytes (default: 1048576 / 1MB)
 
 ## Development
 

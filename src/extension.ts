@@ -85,7 +85,7 @@ export class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
   }
 
   private loadConfiguration(): ExtensionConfig {
-    const config = vscode.workspace.getConfiguration("go-tdd-outline");
+    const config = vscode.workspace.getConfiguration("go-tdt-outline");
     return {
       timeout: config.get<number>("timeout") ?? 10000,
       maxFileSize: config.get<number>("maxFileSize") ?? 1024 * 1024, // 1MB

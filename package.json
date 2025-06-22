@@ -1,6 +1,6 @@
 {
   "name": "go-tdt-outline",
-  "displayName": "Go Table Driven Test Outline",
+  "displayName": "Go TDT Outline",
   "description": "Display table driven test cases in Outline view.",
   "version": "0.0.1",
   "publisher": "toga4",
@@ -29,14 +29,14 @@
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
-      "title": "Go TDD Outline",
+      "title": "Go TDT Outline",
       "properties": {
-        "go-tdd-outline.timeout": {
+        "go-tdt-outline.timeout": {
           "type": "number",
           "default": 10000,
           "description": "Timeout for parser execution in milliseconds"
         },
-        "go-tdd-outline.maxFileSize": {
+        "go-tdt-outline.maxFileSize": {
           "type": "number",
           "default": 1048576,
           "description": "Maximum file size to analyze in bytes (default: 1MB)"
