@@ -17,6 +17,7 @@
     "symbol"
   ],
   "engines": {
+    "node": ">=20.0.0",
     "vscode": "^1.90.0"
   },
   "categories": [
@@ -61,13 +62,15 @@
     "check:fix": "biome check --write .",
     "pretest": "pnpm run clean && pnpm run build-go && pnpm run compile",
     "test": "vscode-test",
+    "test:ci": "pnpm run build-go:${TARGET} && pnpm run compile && vscode-test",
     "test:update-snapshots": "UPDATE_SNAPSHOTS=true pnpm run test",
     "package": "vsce package",
     "package:darwin-arm64": "pnpm run package --target darwin-arm64",
     "package:linux-arm64": "pnpm run package --target linux-arm64",
     "package:linux-x64": "pnpm run package --target linux-x64",
     "package:win32-arm64": "pnpm run package --target win32-arm64",
-    "package:win32-x64": "pnpm run package --target win32-x64"
+    "package:win32-x64": "pnpm run package --target win32-x64",
+    "build:ci": "pnpm run build-go:${TARGET} && pnpm run compile && pnpm run package:${TARGET}"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.4",
