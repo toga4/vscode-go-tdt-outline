@@ -52,8 +52,8 @@ The extension displays it in the Outline view as:
 ## Requirements
 
 - Visual Studio Code v1.90.0 or higher
-- Go 1.18 or higher (for the parser)
 - Go files must have valid syntax
+- No Go installation required (the extension includes a pre-built parser)
 
 ## Installation
 
@@ -90,8 +90,8 @@ This extension contributes the following settings:
 ### Prerequisites
 
 - Node.js and pnpm
-- Go 1.18+
-- VSCode
+- Go
+- Visual Studio Code
 
 ### Setup
 
