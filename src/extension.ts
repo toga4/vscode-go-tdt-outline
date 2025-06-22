@@ -62,8 +62,8 @@ export class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
     this.config = this.loadConfiguration();
 
     // Get path to bundled Go analysis tool
-    const parserFile = process.platform === "win32" ? "go-outline-parser.exe" : "go-outline-parser";
-    this.parserPath = path.join(context.extensionPath, "out", "parser", parserFile);
+    const parserFile = process.platform === "win32" ? "parser.exe" : "parser";
+    this.parserPath = path.join(context.extensionPath, "out", parserFile);
 
     // Check if parser file exists
     this.parserExists = fs.existsSync(this.parserPath);

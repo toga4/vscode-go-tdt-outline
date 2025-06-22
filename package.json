@@ -46,7 +46,7 @@
   },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
-    "build-parser": "go build -o ./out/parser/go-outline-parser ./parser/main.go",
+    "build-parser": "go build -o ./out/parser ./parser/main.go",
     "compile": "tsc -p ./ && cp -r src/test/fixtures out/test/",
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm run build-parser && pnpm run compile && pnpm run check",
