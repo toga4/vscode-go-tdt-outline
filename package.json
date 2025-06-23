@@ -20,6 +20,7 @@
     "node": ">=20.0.0",
     "vscode": "^1.90.0"
   },
+  "packageManager": "pnpm@10.7.0",
   "categories": [
     "Programming Languages",
     "Testing"
