@@ -48,12 +48,7 @@
   },
   "scripts": {
     "clean": "rm -rf out bin",
-    "build-go": "CGO_ENABLED=0 go build -ldflags='-s -w' -o ./bin/parser${EXT} ./parser",
-    "build-go:darwin-arm64": "EXT= GOOS=darwin GOARCH=arm64 pnpm run build-go",
-    "build-go:linux-arm64": "EXT= GOOS=linux GOARCH=arm64 pnpm run build-go",
-    "build-go:linux-x64": "EXT= GOOS=linux GOARCH=amd64 pnpm run build-go",
-    "build-go:win32-arm64": "EXT=.exe GOOS=windows GOARCH=arm64 pnpm run build-go",
-    "build-go:win32-x64": "EXT=.exe GOOS=windows GOARCH=amd64 pnpm run build-go",
+    "build-go": "CGO_ENABLED=0 go build -ldflags='-s -w' -o ./bin/ ./parser",
     "compile": "tsc -p ./ && cp -r src/test/testdata out/test/",
     "watch": "tsc -watch -p ./",
     "lint": "biome lint .",
@@ -66,12 +61,11 @@
     "test:ci": "pnpm run build-go:${TARGET} && pnpm run compile && vscode-test",
     "test:update-snapshots": "UPDATE_SNAPSHOTS=true pnpm run test",
     "package": "vsce package",
-    "package:darwin-arm64": "pnpm run package --target darwin-arm64",
-    "package:linux-arm64": "pnpm run package --target linux-arm64",
-    "package:linux-x64": "pnpm run package --target linux-x64",
-    "package:win32-arm64": "pnpm run package --target win32-arm64",
-    "package:win32-x64": "pnpm run package --target win32-x64",
-    "build:ci": "pnpm run build-go:${TARGET} && pnpm run compile && pnpm run package:${TARGET}"
+    "build:ci:darwin-arm64": "GOOS=darwin GOARCH=arm64 pnpm run build-go && pnpm run compile && pnpm run package --target darwin-arm64",
+    "build:ci:linux-arm64": "GOOS=linux GOARCH=arm64 pnpm run build-go && pnpm run compile && pnpm run package --target linux-arm64",
+    "build:ci:linux-x64": "GOOS=linux GOARCH=amd64 pnpm run build-go && pnpm run compile && pnpm run package --target linux-x64",
+    "build:ci:win32-arm64": "GOOS=windows GOARCH=arm64 pnpm run build-go && pnpm run compile && pnpm run package --target win32-arm64",
+    "build:ci:win32-x64": "GOOS=windows GOARCH=amd64 pnpm run build-go && pnpm run compile && pnpm run package --target win32-x64"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.4",
