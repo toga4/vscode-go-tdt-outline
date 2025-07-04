@@ -420,6 +420,30 @@ func TestParse(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name:     "positional field form",
+			filePath: "testdata/positional_field_form.go",
+			want: []Symbol{
+				{
+					Name:   "TestPositionalFieldForm",
+					Detail: "test function",
+					Kind:   SymbolKindFunction,
+					Children: []Symbol{
+						{
+							Name:   "normal case",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "zero value",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {

@@ -184,6 +184,9 @@ func extractTestCasesFromMap(compLit *ast.CompositeLit, fset *token.FileSet) []S
 func extractTestCasesFromSlice(compLit *ast.CompositeLit, fset *token.FileSet) []Symbol {
 	var testCases []Symbol
 
+	// Extract struct fields if available
+	structFields := extractStructFields(compLit.Type)
+
 	// Extract test cases from this composite literal
 	// We check all composite literals since we can't always determine
 	// if a type alias refers to a slice without type information
@@ -195,7 +198,7 @@ func extractTestCasesFromSlice(compLit *ast.CompositeLit, fset *token.FileSet) [
 			continue
 		}
 
-		testName := extractTestName(caseLit)
+		testName := extractTestName(caseLit, structFields)
 		if testName == "" {
 			continue
 		}
@@ -219,12 +222,11 @@ func createTestCaseSymbol(testName string, node ast.Node, fset *token.FileSet) S
 }
 
 // extractTestName extracts the test name from a struct literal
-func extractTestName(caseLit *ast.CompositeLit) string {
+func extractTestName(caseLit *ast.CompositeLit, structFields []*ast.Field) string {
+	// First try key-value form:
+	//   {name: "test1", ...}
 	for _, kv := range caseLit.Elts {
 		// Skip non-key-value expressions
-		// This handles both:
-		//   {name: "test1", ...}     // key-value form
-		//   {"test1", ...}           // positional form (skip)
 		kve, ok := kv.(*ast.KeyValueExpr)
 		if !ok {
 			continue
@@ -247,6 +249,58 @@ func extractTestName(caseLit *ast.CompositeLit) string {
 		if !ok {
 			continue
 		}
+		return testName
+	}
+
+	// If no key-value form found, try positional form:
+	//   {"test1", ...}
+	return extractTestNameFromPositional(caseLit, structFields)
+}
+
+// extractStructFields extracts field definitions from a struct type
+func extractStructFields(typeExpr ast.Expr) []*ast.Field {
+	if typeExpr == nil {
+		return nil
+	}
+
+	// Handle different type expressions
+	switch t := typeExpr.(type) {
+	case *ast.ArrayType:
+		// []struct{...}
+		return extractStructFields(t.Elt)
+	case *ast.StructType:
+		// struct{...}
+		return t.Fields.List
+	default:
+		// For other types (like ident), we can't extract fields without type resolution
+		return nil
+	}
+}
+
+// extractTestNameFromPositional extracts test name from positional struct literal
+func extractTestNameFromPositional(caseLit *ast.CompositeLit, structFields []*ast.Field) string {
+	// Find the position of any test name field
+	for i, field := range structFields {
+		if len(field.Names) == 0 {
+			continue
+		}
+
+		fieldName := field.Names[0].Name
+		if !isTestNameField(fieldName) {
+			continue
+		}
+
+		// Check if we have enough elements
+		if i >= len(caseLit.Elts) {
+			continue
+		}
+
+		// Extract string literal from that position
+		testName, ok := extractStringLiteral(caseLit.Elts[i])
+		if !ok {
+			continue
+		}
+
 		return testName
 	}
 

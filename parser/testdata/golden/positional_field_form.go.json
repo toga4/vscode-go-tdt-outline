@@ -1,0 +1,51 @@
+[
+  {
+    "name": "TestPositionalFieldForm",
+    "detail": "test function",
+    "kind": 11,
+    "range": {
+      "start": {
+        "line": 4,
+        "character": 0
+      },
+      "end": {
+        "line": 18,
+        "character": 1
+      }
+    },
+    "children": [
+      {
+        "name": "normal case",
+        "detail": "test case",
+        "kind": 22,
+        "range": {
+          "start": {
+            "line": 10,
+            "character": 2
+          },
+          "end": {
+            "line": 10,
+            "character": 23
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "zero value",
+        "detail": "test case",
+        "kind": 22,
+        "range": {
+          "start": {
+            "line": 11,
+            "character": 2
+          },
+          "end": {
+            "line": 11,
+            "character": 22
+          }
+        },
+        "children": null
+      }
+    ]
+  }
+]
