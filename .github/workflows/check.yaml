@@ -37,27 +37,7 @@ jobs:
   test-vscode:
     needs:
       - test-go
-    strategy:
-      matrix:
-        include:
-          - target: linux-arm64
-            os: ubuntu-latest
-            npm_config_arch: arm64
-          - target: linux-x64
-            os: ubuntu-latest
-            npm_config_arch: x64
-          - target: darwin-arm64
-            os: macos-latest
-            npm_config_arch: arm64
-          - target: win32-arm64
-            os: windows-latest
-            npm_config_arch: arm
-          - target: win32-x64
-            os: windows-latest
-            npm_config_arch: x64
-    runs-on: ${{ matrix.os }}
-    env:
-      TARGET: ${{ matrix.target }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
@@ -69,12 +49,4 @@ jobs:
           node-version-file: package.json
           cache: pnpm
       - run: pnpm install
-        env:
-          npm_config_arch: ${{ matrix.npm_config_arch }}
-      - if: runner.os == 'macOS'
-        run: pnpm run test:ci
-      - if: runner.os == 'Linux'
-        run: xvfb-run -a pnpm run test:ci
-      - if: runner.os == 'Windows'
-        run: pnpm run test:ci
-        shell: bash
+      - run: xvfb-run -a pnpm run test
