@@ -396,6 +396,30 @@ func TestParse(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name:     "declaration",
+			filePath: "testdata/declaration_test.go",
+			want: []Symbol{
+				{
+					Name:   "TestDeclaration",
+					Detail: "test function",
+					Kind:   SymbolKindFunction,
+					Children: []Symbol{
+						{
+							Name:   "normal case",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "zero value",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {
