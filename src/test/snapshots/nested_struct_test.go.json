@@ -1,0 +1,81 @@
+[
+  {
+    "name": "TestNestedTable",
+    "detail": "test function",
+    "kind": 11,
+    "range": [
+      {
+        "line": 4,
+        "character": 0
+      },
+      {
+        "line": 37,
+        "character": 1
+      }
+    ],
+    "selectionRange": [
+      {
+        "line": 4,
+        "character": 0
+      },
+      {
+        "line": 37,
+        "character": 1
+      }
+    ],
+    "children": [
+      {
+        "name": "normal case",
+        "detail": "test case",
+        "kind": 22,
+        "range": [
+          {
+            "line": 13,
+            "character": 2
+          },
+          {
+            "line": 21,
+            "character": 3
+          }
+        ],
+        "selectionRange": [
+          {
+            "line": 13,
+            "character": 2
+          },
+          {
+            "line": 21,
+            "character": 3
+          }
+        ],
+        "children": []
+      },
+      {
+        "name": "zero value",
+        "detail": "test case",
+        "kind": 22,
+        "range": [
+          {
+            "line": 22,
+            "character": 2
+          },
+          {
+            "line": 30,
+            "character": 3
+          }
+        ],
+        "selectionRange": [
+          {
+            "line": 22,
+            "character": 2
+          },
+          {
+            "line": 30,
+            "character": 3
+          }
+        ],
+        "children": []
+      }
+    ]
+  }
+]

@@ -105,7 +105,7 @@ func extractTestFunction(n ast.Node, fset *token.FileSet) *Symbol {
 func extractTestCases(body *ast.BlockStmt, fset *token.FileSet) []Symbol {
 	var allTestCases []Symbol
 
-	// Look for all composite literals
+	// Look for test table definitions
 	// Pattern examples:
 	//   tests := []struct{...}{...}              // slice literal
 	//   tests := []Test{...}                     // slice of named type
@@ -113,26 +113,50 @@ func extractTestCases(body *ast.BlockStmt, fset *token.FileSet) []Symbol {
 	//   tests := map[string]struct{...}{...}     // map with string keys
 	//   for _, tc := range []struct{...}{...}    // inline usage
 	ast.Inspect(body, func(n ast.Node) bool {
-		compLit, ok := n.(*ast.CompositeLit)
-		if !ok {
-			return true
+		// Look for variable assignments and range statements
+		switch node := n.(type) {
+		case *ast.AssignStmt:
+			// Pattern: tests := []struct{...}{...}
+			if len(node.Rhs) == 1 {
+				if compLit, ok := node.Rhs[0].(*ast.CompositeLit); ok {
+					testCases := extractFromCompositeLiteral(compLit, fset)
+					allTestCases = append(allTestCases, testCases...)
+				}
+			}
+		case *ast.RangeStmt:
+			// Pattern: for _, tc := range []struct{...}{...}
+			if compLit, ok := node.X.(*ast.CompositeLit); ok {
+				testCases := extractFromCompositeLiteral(compLit, fset)
+				allTestCases = append(allTestCases, testCases...)
+			}
+		case *ast.DeclStmt:
+			// Pattern: var tests = []struct{...}{...}
+			if genDecl, ok := node.Decl.(*ast.GenDecl); ok && genDecl.Tok == token.VAR {
+				for _, spec := range genDecl.Specs {
+					if valueSpec, ok := spec.(*ast.ValueSpec); ok && len(valueSpec.Values) == 1 {
+						if compLit, ok := valueSpec.Values[0].(*ast.CompositeLit); ok {
+							testCases := extractFromCompositeLiteral(compLit, fset)
+							allTestCases = append(allTestCases, testCases...)
+						}
+					}
+				}
+			}
 		}
-
-		// Check if it's a map type
-		if _, ok := compLit.Type.(*ast.MapType); ok {
-			testCases := extractTestCasesFromMap(compLit, fset)
-			allTestCases = append(allTestCases, testCases...)
-			return true
-		}
-
-		// Otherwise, treat as slice/array
-		testCases := extractTestCasesFromSlice(compLit, fset)
-		allTestCases = append(allTestCases, testCases...)
-
 		return true
 	})
 
 	return allTestCases
+}
+
+// extractFromCompositeLiteral extracts test cases from a composite literal
+func extractFromCompositeLiteral(compLit *ast.CompositeLit, fset *token.FileSet) []Symbol {
+	// Check if it's a map type
+	if _, ok := compLit.Type.(*ast.MapType); ok {
+		return extractTestCasesFromMap(compLit, fset)
+	}
+
+	// Otherwise, treat as slice/array
+	return extractTestCasesFromSlice(compLit, fset)
 }
 
 // extractTestCasesFromMap extracts test cases from map pattern
@@ -213,7 +237,6 @@ func extractTestName(caseLit *ast.CompositeLit) string {
 		}
 
 		// Check if the field name is one of the common test name fields
-		// Examples: name, testName, desc, description, title, scenario
 		if !isTestNameField(ident.Name) {
 			continue
 		}

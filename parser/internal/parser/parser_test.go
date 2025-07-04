@@ -372,6 +372,30 @@ func TestParse(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name:     "nested test table-driven test",
+			filePath: "testdata/nested_struct_test.go",
+			want: []Symbol{
+				{
+					Name:   "TestNestedTable",
+					Detail: "test function",
+					Kind:   SymbolKindFunction,
+					Children: []Symbol{
+						{
+							Name:   "normal case",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+						{
+							Name:   "zero value",
+							Detail: "test case",
+							Kind:   SymbolKindStruct,
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 
 	for _, tt := range tests {

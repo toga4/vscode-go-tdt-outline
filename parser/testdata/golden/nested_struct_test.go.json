@@ -1,0 +1,51 @@
+[
+  {
+    "name": "TestNestedTable",
+    "detail": "test function",
+    "kind": 11,
+    "range": {
+      "start": {
+        "line": 4,
+        "character": 0
+      },
+      "end": {
+        "line": 37,
+        "character": 1
+      }
+    },
+    "children": [
+      {
+        "name": "normal case",
+        "detail": "test case",
+        "kind": 22,
+        "range": {
+          "start": {
+            "line": 13,
+            "character": 2
+          },
+          "end": {
+            "line": 21,
+            "character": 3
+          }
+        },
+        "children": null
+      },
+      {
+        "name": "zero value",
+        "detail": "test case",
+        "kind": 22,
+        "range": {
+          "start": {
+            "line": 22,
+            "character": 2
+          },
+          "end": {
+            "line": 30,
+            "character": 3
+          }
+        },
+        "children": null
+      }
+    ]
+  }
+]
