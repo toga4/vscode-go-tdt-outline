@@ -11,6 +11,8 @@ updates:
       dev-dependencies:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "@types/vscode" # Needs to be same or lower version than engine.vscode
 
   - package-ecosystem: gomod
     directory: /
