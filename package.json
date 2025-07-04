@@ -58,14 +58,14 @@
     "check:fix": "biome check --write .",
     "pretest": "pnpm run clean && pnpm run build-go && pnpm run compile",
     "test": "vscode-test",
-    "test:ci": "pnpm run build-go:${TARGET} && pnpm run compile && vscode-test",
     "test:update-snapshots": "UPDATE_SNAPSHOTS=true pnpm run test",
-    "package": "vsce package",
-    "build:ci:darwin-arm64": "GOOS=darwin GOARCH=arm64 pnpm run build-go && pnpm run compile && pnpm run package --target darwin-arm64",
-    "build:ci:linux-arm64": "GOOS=linux GOARCH=arm64 pnpm run build-go && pnpm run compile && pnpm run package --target linux-arm64",
-    "build:ci:linux-x64": "GOOS=linux GOARCH=amd64 pnpm run build-go && pnpm run compile && pnpm run package --target linux-x64",
-    "build:ci:win32-arm64": "GOOS=windows GOARCH=arm64 pnpm run build-go && pnpm run compile && pnpm run package --target win32-arm64",
-    "build:ci:win32-x64": "GOOS=windows GOARCH=amd64 pnpm run build-go && pnpm run compile && pnpm run package --target win32-x64"
+    "package": "vsce package ${TARGET+--target ${TARGET}}",
+    "build": "pnpm run build-go && pnpm run compile && pnpm run package",
+    "build:ci:darwin-arm64": "GOOS=darwin GOARCH=arm64 TARGET=darwin-arm64 pnpm run build",
+    "build:ci:linux-arm64": "GOOS=linux GOARCH=arm64 TARGET=linux-arm64 pnpm run build",
+    "build:ci:linux-x64": "GOOS=linux GOARCH=amd64 TARGET=linux-x64 pnpm run build",
+    "build:ci:win32-arm64": "GOOS=windows GOARCH=arm64 TARGET=win32-arm64 pnpm run build",
+    "build:ci:win32-x64": "GOOS=windows GOARCH=amd64 TARGET=win32-x64 pnpm run build"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.4",
