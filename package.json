@@ -4,10 +4,15 @@
   "description": "Display table driven test cases in Outline view.",
   "version": "0.0.1",
   "publisher": "toga4",
+  "homepage": "https://github.com/toga4/vscode-go-tdt-outline",
   "repository": {
     "type": "git",
     "url": "https://github.com/toga4/vscode-go-tdt-outline"
   },
+  "bugs": {
+    "url": "https://github.com/toga4/vscode-go-tdt-outline/issues"
+  },
+  "license": "MIT",
   "keywords": [
     "go",
     "golang",
