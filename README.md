@@ -15,39 +15,12 @@ Go TDT Outline enhances your Go testing experience by:
   - Map-based test cases
 - **Smart Name Detection**: Automatically detects test case names from common field names (name, testName, desc, description, title, scenario)
 
-### Example
+### Screenshot
 
-When you have a test file like this:
+When you have a test file like this, the extension displays it in the Outline view.
 
-```go
-func TestCalculate(t *testing.T) {
-    tests := []struct {
-        name     string
-        input    int
-        expected int
-    }{
-        {
-            name:     "positive number",
-            input:    5,
-            expected: 10,
-        },
-        {
-            name:     "zero",
-            input:    0,
-            expected: 0,
-        },
-    }
-    // test implementation...
-}
-```
+<img width="782" alt="image" src="https://github.com/user-attachments/assets/734de4b5-ec18-49ee-97cd-12ea77318955" />
 
-The extension displays it in the Outline view as:
-
-```
-▼ TestCalculate
-  ├── positive number
-  └── zero
-```
 
 ## Requirements
 
