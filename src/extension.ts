@@ -1,7 +1,6 @@
 import * as cp from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { promisify } from "node:util";
 import * as vscode from "vscode";
 
 // Type definition for JSON output from Go analysis tool
@@ -21,8 +20,6 @@ interface ExtensionConfig {
   timeout: number;
   maxFileSize: number;
 }
-
-const execFileAsync = promisify(cp.execFile);
 
 export interface ExtensionApi {
   documentSymbolProvider: GoTddOutlineProvider;
@@ -92,6 +89,60 @@ export class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
     };
   }
 
+  private runParser(
+    input: string,
+    token: vscode.CancellationToken,
+  ): Promise<{ stdout: string; stderr: string } | null> {
+    return new Promise((resolve, reject) => {
+      const proc = cp.spawn(this.parserPath, ["-"]);
+      let stdout = "";
+      let stderr = "";
+
+      // Set up timeout
+      const timeoutId = setTimeout(() => {
+        proc.kill();
+        reject(new Error(`Parser timeout after ${this.config.timeout}ms`));
+      }, this.config.timeout);
+
+      // Handle cancellation
+      token.onCancellationRequested(() => {
+        clearTimeout(timeoutId);
+        proc.kill();
+        resolve(null);
+      });
+
+      // Collect stdout
+      proc.stdout.on("data", (data) => {
+        stdout += data.toString();
+      });
+
+      // Collect stderr
+      proc.stderr.on("data", (data) => {
+        stderr += data.toString();
+      });
+
+      // Handle process exit
+      proc.on("close", (code) => {
+        clearTimeout(timeoutId);
+        if (code === 0) {
+          resolve({ stdout, stderr });
+        } else {
+          reject(new Error(`Parser exited with code ${code}: ${stderr}`));
+        }
+      });
+
+      // Handle process errors
+      proc.on("error", (error) => {
+        clearTimeout(timeoutId);
+        reject(error);
+      });
+
+      // Write input to stdin and close it
+      proc.stdin.write(input);
+      proc.stdin.end();
+    });
+  }
+
   async provideDocumentSymbols(
     document: vscode.TextDocument,
     token: vscode.CancellationToken,
@@ -116,17 +167,18 @@ export class GoTddOutlineProvider implements vscode.DocumentSymbolProvider {
     }
 
     try {
-      const { stdout, stderr } = await execFileAsync(this.parserPath, [document.fileName], {
-        timeout: this.config.timeout,
-      });
-
-      if (stderr?.trim()) {
-        this.outputChannel.appendLine(`Parser stderr: ${stderr}`);
+      const result = await this.runParser(document.getText(), token);
+      if (!result) {
+        return [];
       }
 
-      const goSymbols: GoSymbol[] = JSON.parse(stdout);
+      const goSymbols: GoSymbol[] = JSON.parse(result.stdout);
       if (!goSymbols || !Array.isArray(goSymbols)) {
         return [];
+      }
+
+      if (result.stderr?.trim()) {
+        this.outputChannel.appendLine(`Parser stderr: ${result.stderr}`);
       }
 
       const vsCodeSymbols = this.convertToVSCodeSymbols(goSymbols);

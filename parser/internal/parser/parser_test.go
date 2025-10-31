@@ -450,18 +450,18 @@ func TestParse(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := Parse(tt.filePath)
+			got, err := ParseFile(tt.filePath)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Parse() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ParseFile() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if err != nil {
-				t.Logf("Parse() error = %v", err)
+				t.Logf("ParseFile() error = %v", err)
 			}
 
 			if !tt.wantErr {
 				if diff := cmp.Diff(tt.want, got, cmpopts.IgnoreFields(Symbol{}, "Range")); diff != "" {
-					t.Errorf("Parse() mismatch (-want +got):\n%s", diff)
+					t.Errorf("ParseFile() mismatch (-want +got):\n%s", diff)
 				}
 			}
 		})

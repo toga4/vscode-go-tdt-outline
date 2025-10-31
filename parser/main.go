@@ -11,13 +11,22 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		log.Fatalf("Usage: %s <file_path>", os.Args[0])
+		log.Fatalf("Usage: %s <file_path|->", os.Args[0])
 	}
 
-	filePath := os.Args[1]
-	symbols, err := parser.Parse(filePath)
+	arg := os.Args[1]
+	var symbols []parser.Symbol
+	var err error
+
+	if arg == "-" {
+		// Read from stdin
+		symbols, err = parser.Parse("<stdin>", os.Stdin)
+	} else {
+		// Read from file
+		symbols, err = parser.ParseFile(arg)
+	}
 	if err != nil {
-		log.Fatalf("Failed to parse file: %v", err)
+		log.Fatalf("Failed to parse: %v", err)
 	}
 
 	if err := json.NewEncoder(os.Stdout).Encode(symbols); err != nil {

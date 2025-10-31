@@ -5,6 +5,8 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"io"
+	"os"
 	"slices"
 	"strconv"
 	"strings"
@@ -37,19 +39,18 @@ const (
 	SymbolKindStruct   = 22 // VS Code's SymbolKind.Struct
 )
 
-// Parse analyzes a Go file and extracts test functions with their test cases
-func Parse(filePath string) ([]Symbol, error) {
-	if filePath == "" {
-		return nil, fmt.Errorf("file path cannot be empty")
-	}
-	if !strings.HasSuffix(filePath, ".go") {
-		return nil, fmt.Errorf("file must have .go extension: %s", filePath)
+// Parse analyzes Go source code and extracts test functions with their test cases.
+// filename is used for error messages and position information.
+// src is an io.Reader containing Go source code.
+func Parse(filename string, src io.Reader) ([]Symbol, error) {
+	if filename == "" {
+		return nil, fmt.Errorf("filename cannot be empty")
 	}
 
 	fset := token.NewFileSet()
-	node, err := parser.ParseFile(fset, filePath, nil, 0)
+	node, err := parser.ParseFile(fset, filename, src, 0)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse Go file %s: %w", filePath, err)
+		return nil, fmt.Errorf("failed to parse Go file %s: %w", filename, err)
 	}
 
 	symbols := []Symbol{}
@@ -63,6 +64,26 @@ func Parse(filePath string) ([]Symbol, error) {
 	})
 
 	return symbols, nil
+}
+
+// ParseFile analyzes a Go file and extracts test functions with their test cases.
+func ParseFile(filePath string) ([]Symbol, error) {
+	if filePath == "" {
+		return nil, fmt.Errorf("file path cannot be empty")
+	}
+	if !strings.HasSuffix(filePath, ".go") {
+		return nil, fmt.Errorf("file must have .go extension: %s", filePath)
+	}
+
+	f, err := os.Open(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file: %w", err)
+	}
+	defer func() {
+		_ = f.Close() // ignore error
+	}()
+
+	return Parse(filePath, f)
 }
 
 // extractTestFunction extracts a test function symbol if the node is a test function
