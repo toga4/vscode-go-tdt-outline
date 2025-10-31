@@ -13,6 +13,8 @@ updates:
           - "*"
     ignore:
       - dependency-name: "@types/vscode" # Needs to be same or lower version than engine.vscode
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: gomod
     directory: /
@@ -25,6 +27,8 @@ updates:
       dependencies:
         patterns:
           - "*"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: github-actions
     directory: /
@@ -33,3 +37,5 @@ updates:
       day: monday
       time: "05:00"
       timezone: Asia/Tokyo
+    cooldown:
+      default-days: 7
